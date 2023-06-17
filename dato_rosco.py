@@ -17,7 +17,7 @@ Lista de letras que deben procesar:
 'x', 'y', 'z']
 """
 import random
-from filtrado_dicc import cargar_datos_para_rosco
+#from filtrado_dicc import cargar_datos_para_rosco
 
 
 def cargar_letras():
@@ -33,23 +33,28 @@ def cargar_letras():
     lista_letras = random.sample(letras, k=10)
     return sorted(lista_letras, key=lambda x: x.replace("ñ", "n~"))
 
-# Funcion que retorna dos listas ordenadas alfabeticamente
-def cargar_palabras(diccionario_rosco, lista_letras):
+# Funcion que retorna una lista de listas
+def cargar_palabras_definiciones(diccionario_rosco, lista_letras):
     """
     La funcion recibe dos parametros; 1 diccionario el cual
     tiene como clave letra y valores una lista de listas de tipo
-    [palabra(str), definicion(str)],  y 1 lista que contiene 10
-    letras ordenadas alfabeticamente
-    La funcion retorna dos listas ordenadas alfabeticamente
+    [palabra(str), definicion(str)], y el segundo parametro que recibe
+    es una lista que contiene 10 letras ordenadas alfabeticamente
+    La funcion una lista de listas 
     """
-    palabras = []
-    definiciones = []
+    palabras_definiciones = []
     for letra in lista_letras:
         if(letra in diccionario_rosco):
             palabra_definicion = random.choice(diccionario_rosco[letra])
-            palabras.append(palabra_definicion[0])
-            definiciones.append(palabra_definicion[1])
-    return palabras, definiciones
+            palabras_definiciones.append(palabra_definicion)
+    return palabras_definiciones
+
+#diccionario_rosco = cargar_datos_para_rosco()
+#lista_letras = cargar_letras()
+#lista = cargar_palabras_definiciones(diccionario_rosco, lista_letras)
+
+
+
 
 """
 def probar_funcion(dicc_rosco):
@@ -57,17 +62,18 @@ def probar_funcion(dicc_rosco):
     for i in range(100):
         print(cargar_palabras(dicc_rosco, lista_letras))
 """
-
+"""
 def datos_rosco():
-    """
+    
     Esta funcion es el bloque principal del programa
-    """
+    
     diccionario_rosco = cargar_datos_para_rosco()
     lista_letras = cargar_letras()
     palabras, definiciones = cargar_palabras(diccionario_rosco, lista_letras)
     return lista_letras, palabras, definiciones
+"""
+
 
     #print(lista_letras)
     #print(palabra)
     #print(definicion)
-#print(datos_rosco())
