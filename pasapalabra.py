@@ -10,20 +10,24 @@ La secuencia del juego debe ser la siguiente:
 implementando así, lo realizado en la etapa 1.
 """
 import dato_rosco
+from filtrado_dicc import cargar_datos_para_rosco, palabra_sin_acento
+
 ACIERTO = "a"
 ERROR = "e"
-
+"""
 def generar_diccionario():
-    """
+    
     La funcion importa las funciones de dato_rosco.py
     y devuelve un diccionario con clave palabra y valor definicion,
     y tambien devuelve una lista_letras
-    """
+    
     lista_letras, palabras, definiciones = dato_rosco.datos_rosco()
     datos_rosco = {}
     for i in range(len(lista_letras)):
         datos_rosco[palabras[i]] = definiciones[i]
     return datos_rosco, lista_letras
+
+"""
 
 def mostrar_tablero(lista_letras, resultados, aciertos, errores, posicion, letra, long_palabra, definicion):
     """
@@ -39,32 +43,15 @@ Errores: {errores}
 Turno letra: {letra} Longitud palabra: {long_palabra} \nDefinicion: {definicion}
     """)
 
-def cargar_palabra():
-    """
-    Esta funcion se encargar de cargar valores para 
-    la variable palabra.
-    """
-    palabra = input("Ingrese la palabra: ").lower()
-    return palabra
-
-def verificar_palabra(palabra):
+def cargar_palabra_valida():
     """
     La función recibe como parámetro una variable y retorna la variable de tipo string 
     """
+    palabra = input("Ingrese la palabra: ").lower()
     while not palabra.isalpha():
         print("Ingrese solo LETRAS!")
-        palabra = cargar_palabra()
-    return palabra
-
-def ingresar_palabra():
-    """
-    La funcion guarda los valores de las funciones,
-    "cargar_palabra" y de "verificar_palabra" en la
-    variable palabra y retorna la variable palabra(str)
-    """
-    palabra = cargar_palabra()
-    palabra = verificar_palabra(palabra)
-    return palabra
+        palabra = input("Ingrese la palabra: ").lower()
+    return palabra_sin_acento(palabra)
 
 def analizar_palabra_ingresada(palabra_ingresada, clave_palabra):
     """
@@ -80,22 +67,17 @@ def analizar_palabra_ingresada(palabra_ingresada, clave_palabra):
     """
     return ACIERTO if (palabra_ingresada == clave_palabra) else ERROR
 
-def contar_puntos(resultado, aciertos, errores):
-    """
-    La funcion recibe un parametro que es una
-    variable de tipo str
-    La funcion devuelve 3 variables inicializadas
-    de tipo int
-    """
+def analizar_respuesta(dicc_resultados, resultado):
     if (resultado == ACIERTO):
-        aciertos += 1
-        puntos = 10
+        dicc_resultados["aciertos"] += 1
+        dicc_resultados["puntos"] += 10
     else:
-        errores += 1
-        puntos = -3
-    return aciertos, errores, puntos
+        dicc_resultados["errores"] += 1
+        dicc_resultados["puntos"] -= 3
 
-def jugar_turno(aciertos, errores, posicion,
+    return dicc_resultados
+
+def jugar_turno(resultados_puntaje, posicion,
                 lista_letras, resultados, palabra, definicion):
     """
     La funcion recibe 7 parametros los cuales deben ser;
@@ -106,15 +88,17 @@ def jugar_turno(aciertos, errores, posicion,
     int y una str
     """
     letra = palabra[0]
+    aciertos = resultados_puntaje["aciertos"]
+    errores = resultados_puntaje["errores"]
     long_palabra = len(palabra)
     mostrar_tablero(lista_letras, resultados, aciertos, errores,
                     posicion, letra, long_palabra, definicion)
-    palabra_ingresada = ingresar_palabra()
+    palabra_ingresada = cargar_palabra_valida()
     resultado = analizar_palabra_ingresada(palabra_ingresada, palabra)
     resultados[posicion] = resultado
-    aciertos, errores, puntos = contar_puntos(resultado, aciertos, errores)
+    resultados_puntajes= analizar_respuesta(resultados_puntaje, resultado)
 
-    return aciertos, errores, puntos, palabra_ingresada
+    return resultados_puntajes, palabra_ingresada
 
 def mostrar_resultado (resultado, letra, long_palabra, palabra_jugador, palabra_correcta):
     """
@@ -127,54 +111,50 @@ def mostrar_resultado (resultado, letra, long_palabra, palabra_jugador, palabra_
     else:
         print(f"Turno de la letra: {letra} - Palabra de {long_palabra} letras - {palabra_jugador}")
 
-def mostrar_resumen_de_juego(diccionario_rosco, 
+def mostrar_resumen_de_juego(lista_datos_rosco, 
                                 palabras_ingresadas, resultado):
     """
-    La funcion recibe tres parametros; un diccionario y dos lista
-    ya inicializadas.
+    La funcion recibe tres parametros; 3 listas ya inicializadas.
     La funcion muestra por pantalla el resumen de la partida
     """
     print("\n-------- Resumen de la partida -----------")
     print("-" * 90)
-    for posicion, palabra in enumerate(diccionario_rosco.keys()):
-        letra = palabra[0]
-        long_palabra = len(palabra)
-        palabra_correcta = palabra
+    posicion = 0
+    for palabra_definicion in lista_datos_rosco:
+        palabra_correcta = palabra_definicion[0]
+        letra = palabra_correcta[0]
+        long_palabra = len(palabra_correcta)
         palabra_jugador = palabras_ingresadas[posicion]
         resultado = analizar_palabra_ingresada(palabra_jugador, palabra_correcta)
         mostrar_resultado(resultado, letra, long_palabra, palabra_jugador, palabra_correcta)
+        posicion += 1
     print("-" * 90)
 
-def juego_inicializado(diccionario_rosco, lista_letras, resultados):
-    aciertos = 0
-    errores = 0
-    puntos_totales = 0
+def juego_inicializado(lista_datos_rosco, lista_letras, resultados):
+    """
+    La funcion recibe 3 listas inicializadas y 
+    retorna los puntos de dicha partida
+    """
+    resultados_puntaje = {"aciertos": 0, "errores": 0, "puntos": 0 }
     palabras_ingresadas = []
-
-    for indice, palabra in enumerate(diccionario_rosco.keys()):
+    posicion = 0
+    for palabra, definicion in lista_datos_rosco:
         print(palabra)
         letra = palabra[0]
         long_palabra = len(palabra)
-        posicion = indice
-        definicion = diccionario_rosco[palabra]
-        aciertos, errores, puntos, palabra_ingresada = jugar_turno(
-            aciertos, errores, posicion, lista_letras, resultados, palabra, definicion)
-        puntos_totales += puntos
+        resultado_puntaje, palabra_ingresada = jugar_turno(
+            resultados_puntaje, posicion, lista_letras, resultados, palabra, definicion)
+        aciertos = resultado_puntaje["aciertos"]
+        errores = resultado_puntaje["errores"]
         palabras_ingresadas.append(palabra_ingresada)
-    
+        puntos_totales = resultado_puntaje["puntos"]
+        posicion += 1
+
     mostrar_tablero(lista_letras, resultados, aciertos, errores, posicion, letra, long_palabra, definicion)
-    mostrar_resumen_de_juego(diccionario_rosco, palabras_ingresadas, resultados)
+    mostrar_resumen_de_juego(lista_datos_rosco, palabras_ingresadas, resultados)
     return puntos_totales
 
-def cargar_respuesta():
-    """
-    La funcion carga valores a la variable "respuesta"
-    y la retorna
-    """
-    respuesta = input("¿Camarada deseas seguir jugando? (si/no): ").lower()
-    return respuesta
-
-def verificar_respuesta(respuesta):
+def verificar_respuesta():
     """
     La funcion recibe como parametro a la variable "respuesta"
     con la cual trabajara para verificar que lo hay dentro de esa
@@ -182,27 +162,22 @@ def verificar_respuesta(respuesta):
     La funcion retorna la variable con una cadena de caracteres que
     puede ser "si" o "no"
     """
+    respuesta = palabra_sin_acento(input("¿Camarada deseas seguir jugando? (si/no): ").lower())
     while (respuesta != "si") and (respuesta != "no"):
         print("Por favor, ingrese 'si' o 'no'")
-        respuesta = cargar_respuesta()
-    return respuesta
-
-def ingresar_respuesta():
-    """
-    La funcion se encarga de agregarle valor
-    """
-    respuesta = cargar_respuesta()
-    respuesta = verificar_respuesta(respuesta)
+        respuesta = palabra_sin_acento(input("¿Camarada deseas seguir jugando? (si/no): ").lower())
     return respuesta
 
 def jugar_rosco():
     resultado = [" " for i in range(10)]
     continuar_jugando = True
     puntaje_total = 0
+    lista_letras = dato_rosco.cargar_letras()
+    diccionario_datos_rosco = cargar_datos_para_rosco()
 
     while continuar_jugando:
-        diccionario_rosco, lista_letras = generar_diccionario()
-        puntaje_partida = juego_inicializado(diccionario_rosco, lista_letras, resultado)
+        palabras_definiciones = dato_rosco.cargar_palabras_definiciones(diccionario_datos_rosco, lista_letras)
+        puntaje_partida = juego_inicializado(palabras_definiciones, lista_letras, resultado)
         puntaje_total += puntaje_partida
         print(f"\nEl puntaje de la partida es: {puntaje_partida}")
         respuesta = ingresar_respuesta()
