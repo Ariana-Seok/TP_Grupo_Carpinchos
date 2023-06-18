@@ -31,8 +31,9 @@ def generar_diccionario():
 
 def mostrar_tablero(lista_letras, resultados, aciertos, errores, posicion, letra, long_palabra, definicion):
     """
-    Esta funcion recibe 4 parametros (2 listas y 2 variables (int)) y
-    Muestra por pantalla el estado del juego.
+    La funcion se encarga de mostrar por pantalla el tablero del juego.
+    PRE: Recbe dos lista y 6 variables (4 de tipo int y 2 de tipo str)
+    POST: Muestra por pantalla el estado del juego
     """
     print(f"""
 {''.join(f'[{letra.upper()}]' for letra in lista_letras)}
@@ -45,7 +46,7 @@ Turno letra: {letra} Longitud palabra: {long_palabra} \nDefinicion: {definicion}
 
 def cargar_palabra_valida():
     """
-    La función recibe como parámetro una variable y retorna la variable de tipo string 
+    La función se encarga de cargar valor a la variable "palabra"
     """
     palabra = input("Ingrese la palabra: ").lower()
     while not palabra.isalpha():
@@ -54,6 +55,13 @@ def cargar_palabra_valida():
     return palabra_sin_acento(palabra)
 
 def analizar_respuesta(dicc_resultados, resultado):
+    """
+    La funcion se encarga de cargar los puntos dependiendo de lo
+    que haya en la variable resultado.
+    PRE: Recibe dos parametros; un diccionario y una variable 
+    POST: Retorna el diccionario cargando añadiendo valor a las 
+    mencionadas claves.
+    """
     if (resultado == ACIERTO):
         dicc_resultados["aciertos"] += 1
         dicc_resultados["puntos"] += 10
