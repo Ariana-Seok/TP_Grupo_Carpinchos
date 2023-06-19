@@ -33,6 +33,14 @@ def cargar_letras():
     lista_letras = random.sample(letras, k=10)
     return sorted(lista_letras, key=lambda x: x.replace("ñ", "n~"))
 
+"""
+def probar_funcion(dicc_rosco):
+    lista_letras = cargar_letras()
+    for i in range(100):
+        print(cargar_palabras(dicc_rosco, lista_letras))
+"""
+
+
 # Funcion que retorna una lista de listas
 def cargar_palabras_definiciones(diccionario_rosco, lista_letras):
     """
@@ -53,27 +61,3 @@ def cargar_palabras_definiciones(diccionario_rosco, lista_letras):
 #lista_letras = cargar_letras()
 #lista = cargar_palabras_definiciones(diccionario_rosco, lista_letras)
 
-
-
-
-"""
-def probar_funcion(dicc_rosco):
-    lista_letras = cargar_letras()
-    for i in range(100):
-        print(cargar_palabras(dicc_rosco, lista_letras))
-"""
-"""
-def datos_rosco():
-    
-    Esta funcion es el bloque principal del programa
-    
-    diccionario_rosco = cargar_datos_para_rosco()
-    lista_letras = cargar_letras()
-    palabras, definiciones = cargar_palabras(diccionario_rosco, lista_letras)
-    return lista_letras, palabras, definiciones
-"""
-
-
-    #print(lista_letras)
-    #print(palabra)
-    #print(definicion)
