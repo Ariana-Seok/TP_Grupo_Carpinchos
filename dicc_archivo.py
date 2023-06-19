@@ -84,16 +84,15 @@ def manejo_datos():
     Esta funcion se encarga de abrir los archivos y cerrarlos correctamente luego de la interaccion con ellos.
     La funcion retorna un diccionario con claves ordenadas alfabeticamente
     """
-    palabras = open("Archivos de Texto a Utilizar - TP Grupal-20230619/palabras.txt", "r")
-    definiciones = open("Archivos de Texto a Utilizar - TP Grupal-20230619/definiciones.txt", "r")
-    datos = open("diccionario.csv", "w")
+    palabras = open("Archivos de Texto a Utilizar - TP Grupal-20230619\palabras.txt", "rt", encoding="utf-8")
+    definiciones = open("Archivos de Texto a Utilizar - TP Grupal-20230619\definiciones.txt", "rt", encoding="utf-8")
+    datos = open("diccionario.csv", "w", encoding="utf-8")
     lista_aux = cargar_palabras_definiciones(palabras, definiciones)
     diccionario_rosco = cargar_diccionario(lista_aux)
     cargar_datos(diccionario_rosco, datos)
     palabras.close()
     definiciones.close()
     datos.close()
-    #cargar_diccionario(lista_aux)
     return diccionario_rosco
 
 
