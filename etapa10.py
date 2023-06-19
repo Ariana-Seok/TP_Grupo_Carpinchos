@@ -30,7 +30,7 @@ def cargar_configuraciones(archivo):
 
 
 def main():
-    configuracion = open("/home/arianaseok/Escritorio/TP_Carpinchos/TP_ALGO-_I/configuracion.csv", "r+")
+    configuracion = open("configuracion.csv", "r+")
     configuraciones = cargar_configuraciones(configuracion)
     configuracion.close()
     
