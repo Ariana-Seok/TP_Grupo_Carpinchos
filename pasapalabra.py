@@ -9,9 +9,9 @@ La secuencia del juego debe ser la siguiente:
 4. Luego se armará el tablero que visualizará el usuario, y dará comienzo la partida,
 implementando así, lo realizado en la etapa 1.
 """
-import dato_rosco
-from filtrado_dicc import cargar_datos_para_rosco, palabra_sin_acento
-
+from dato_rosco import cargar_letras, cargar_palabras_definiciones
+from filtrado_dicc import palabra_sin_acento
+from dicc_archivo import manejo_datos
 ACIERTO = "a"
 ERROR = "e"
 """
@@ -163,11 +163,11 @@ def jugar_rosco():
     resultado = [" " for i in range(10)]
     continuar_jugando = True
     puntaje_total = 0
-    diccionario_datos_rosco = cargar_datos_para_rosco()
+    diccionario_datos_rosco = manejo_datos()
 
     while continuar_jugando:
-        lista_letras = dato_rosco.cargar_letras()
-        palabras_definiciones = dato_rosco.cargar_palabras_definiciones(diccionario_datos_rosco, lista_letras)
+        lista_letras = cargar_letras()
+        palabras_definiciones = cargar_palabras_definiciones(diccionario_datos_rosco, lista_letras)
         puntaje_partida = juego_inicializado(palabras_definiciones, lista_letras, resultado)
         puntaje_total += puntaje_partida
         print(f"\nEl puntaje de la partida es: {puntaje_partida}")
