@@ -1,5 +1,6 @@
 from filtrado_dicc import palabra_sin_acento
 LONGITUD_PALABRA_MINIMA = 4
+MAX = "ZZZZZZ"
 
 def leer_archivo(archivo):
     """
@@ -8,7 +9,11 @@ def leer_archivo(archivo):
     POST: Devuelve una linea del archivo
     """
     linea = archivo.readline()
-    return linea.rstrip("\n")
+    if (linea):
+        registro = linea.rstrip("\n")
+    else:
+        registro = MAX
+    return registro
 
 def cargar_archivo(archivo, palabra, definicion):
     """
@@ -28,7 +33,7 @@ def cargar_palabras_definiciones(arPalabra, arDefiniciones):
     palabra = leer_archivo(arPalabra)
     definicion = leer_archivo(arDefiniciones)
     lista_aux = []
-    while(palabra and definicion):
+    while(palabra != MAX) and (definicion != MAX):
         if(palabra.isalpha()) and (len(palabra) >= LONGITUD_PALABRA_MINIMA):
             lista = [palabra_sin_acento(palabra), definicion]
             lista_aux.append(lista)
