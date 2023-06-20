@@ -4,7 +4,6 @@ from filtrado_dicc import cargar_datos_para_rosco, palabra_sin_acento
 ACIERTO = "a"
 ERROR = "e"
 
-
 MAX = "ZZZZZZ"
 ultimo = [MAX, "final"]
 
@@ -21,7 +20,6 @@ def leer_archivo(archivo):
         registro = ultimo
     return registro
 
-
 def mostrar_tablero(lista_letras, referencias, resultados, posicion, letra, long_palabra, definicion, jugadores, turno_jugador):
     """
     La funcion se encarga de mostrar por pantalla el tablero del juego.
@@ -32,7 +30,7 @@ def mostrar_tablero(lista_letras, referencias, resultados, posicion, letra, long
 {''.join(f'[{letra.upper()}]' for letra in lista_letras)}
 {''.join(f'[{referencia}]' for referencia in referencias)}
 {''.join(f'[{resultado}]' for resultado in resultados)}
-{' ' * (posicion * 3 + 1)}^¨
+{' ' * (posicion * 3 + 1)}^
 """)
     for jugador in jugadores:
         referencia_jugador = jugadores[jugador][0]
@@ -65,24 +63,30 @@ def respuesta_verificada():
         respuesta = palabra_sin_acento(input("¿Camarada deseas seguir jugando? (si/no): ").lower())
     return respuesta
 
-def analizar_respuesta(resultados, resultado):
+def analizar_respuesta(puntajes, resultado):
     """
     La funcion se encarga de cargar los puntos dependiendo de lo
     que haya en la variable resultado.
     PRE: Recibe dos parametros; una lista y una variable 
     POST: Retorna la lista añadiendo valor a sus componentes.
+    >>> analizar_respuesta([0, 0, 0], "a")
+    [1, 0, 10]
+    >>> analizar_respuesta([0, 0, 0], "e")
+    [0, 1, -3]
+    >>> analizar_respuesta([1,1,7], "a")
+    [2, 1, 17]
     """
-    aciertos = resultados[0]
-    errores = resultados[1]
-    puntaje = resultados[2]
+    #aciertos = puntajes[0]
+    #errores = puntajes[1]
+    #puntaje = puntajes[2]
 
     if (resultado == ACIERTO):
-        aciertos += 1
-        puntaje += 10
+        puntajes[0] += 1
+        puntajes[2] += 10
     else:
-        errores += 1
-        puntaje -= 3
-    return resultados
+        puntajes[1] += 1
+        puntajes[2] += -3
+    return puntajes
 
 def jugar_turno(jugadores, turno_jugador, posicion, lista_letras, resultados, palabra, definicion, referencias):
     """
@@ -93,6 +97,7 @@ def jugar_turno(jugadores, turno_jugador, posicion, lista_letras, resultados, pa
     La funcion devuelve 4 variables las cuales son 3 de tipo
     int y una str
     """
+    referencia_jugador = jugadores[turno_jugador][0]
     letra = palabra[0]
     resultados_puntaje = [0, 0, 0]
     long_palabra = len(palabra)
@@ -101,9 +106,9 @@ def jugar_turno(jugadores, turno_jugador, posicion, lista_letras, resultados, pa
     palabra_ingresada = cargar_palabra_valida()
     resultado = ACIERTO if (palabra_ingresada == palabra) else ERROR
     resultados[posicion] = resultado
-    resultados_puntajes = analizar_respuesta(resultados_puntaje, resultado)
-
-    datos = [resultados, resultados_puntaje[0], resultados_puntaje[1],resultados_puntaje[2], palabra_ingresada]
+    referencias[posicion] = referencia_jugador
+    resultados_puntaje = analizar_respuesta(resultados_puntaje, resultado)
+    datos = [resultado, resultados_puntaje[0], resultados_puntaje[1], resultados_puntaje[2], palabra_ingresada]
     #resultados, aciertos, errores, puntaje, palabra_ingresada
     return datos
 
@@ -118,19 +123,24 @@ def mostrar_resumen_de_juego(diccionario_rosco, jugadores, resultados):
             definicion = diccionario_rosco[palabra]
             print(f"Palabra: {palabra} - Definición: {definicion} - Resultado: {resultado}")
 
+def verificar_resultado(resultado):
+    return resultado == ACIERTO
+
 def juego_inicializado(datos_rosco, lista_letras, jugadores, resultados, referencias):
     """
     La funcion recibe 3 listas inicializadas y 
     retorna los puntos totales de dicha partida
     """
     posicion = 0
+    
     while(posicion < len(datos_rosco)):
         for jugador in jugadores.keys():
+            usuario = jugador
             aciertos = jugadores[jugador][1]
             errores = jugadores[jugador][2]
             puntaje = jugadores[jugador][3]
             palabras_ingresadas = []
-            usuario = jugador
+            
             respuesta = True
             while(posicion < len(datos_rosco)) and (respuesta):
                 palabra = datos_rosco[posicion][0]
@@ -139,12 +149,11 @@ def juego_inicializado(datos_rosco, lista_letras, jugadores, resultados, referen
                 letra = palabra[0]
                 long_palabra = len(palabra)
                 datos = jugar_turno(jugadores, usuario, posicion, lista_letras, resultados, palabra, definicion, referencias)
-                #[respuesta,aciertos, errores, puntaje, palabra_ingresada]
                 aciertos += datos[1]
                 errores += datos[2]
                 puntaje += datos[3]
                 palabras_ingresadas.append(datos[4])
-                respuesta = datos[0]
+                respuesta = verificar_resultado(datos[0])
                 posicion += 1
             jugadores[jugador].append(palabras_ingresadas)
         posicion += 1
@@ -192,27 +201,6 @@ def jugar_rosco(archivo):
         datos_rosco = dato_rosco.cargar_palabras_definiciones(diccionario_palabra_def, lista_letras)
         jugadores = juego_inicializado(datos_rosco, lista_letras, jugadores, resultados, referencias)
 
-        """
-        puntaje_total += puntaje_partida
-        print(f"\nEl puntaje de la partida es: {puntaje_partida}")
-        respuesta = respuesta_verificada()
-        if (respuesta == "no"):
-            continuar_jugando = False
-        else:
-            resultado = [" " for i in range(10)]
-        
-        """
-        
-        """
-        for palabra in diccionario_rosco.keys():
-            definicion = diccionario_rosco[palabra]
-            puntos, palabra_ingresada = jugar_turno(jugadores, lista_letras, resultados, palabra, definicion)
-            if palabra_ingresada == "fin":
-                print("Juego terminado.")
-                mostrar_resumen_de_juego(diccionario_rosco, jugadores, resultados)
-        """
-        
-
 
 def jugadores_a_jugar():
     jugadores = open("usuarios.csv","r")
@@ -221,14 +209,9 @@ def jugadores_a_jugar():
 
 jugadores_a_jugar()
 
+#jugar_rosco()
 
 
 
-
-
-
-
-
-
-
-jugar_rosco()
+#import doctest
+#print(doctest.testmod())
