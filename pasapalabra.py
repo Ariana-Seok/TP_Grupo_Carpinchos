@@ -14,20 +14,6 @@ from filtrado_dicc import palabra_sin_acento
 from dicc_archivo import manejo_datos
 ACIERTO = "a"
 ERROR = "e"
-"""
-def generar_diccionario():
-    
-    La funcion importa las funciones de dato_rosco.py
-    y devuelve un diccionario con clave palabra y valor definicion,
-    y tambien devuelve una lista_letras
-    
-    lista_letras, palabras, definiciones = dato_rosco.datos_rosco()
-    datos_rosco = {}
-    for i in range(len(lista_letras)):
-        datos_rosco[palabras[i]] = definiciones[i]
-    return datos_rosco, lista_letras
-
-"""
 
 def mostrar_tablero(lista_letras, resultados, aciertos, errores, posicion, letra, long_palabra, definicion):
     """
