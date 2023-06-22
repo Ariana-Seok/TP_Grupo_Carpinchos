@@ -1,12 +1,12 @@
 import dato_rosco
-from filtrado_dicc import cargar_datos_para_rosco, palabra_sin_acento
+from filtrado_dicc import palabra_sin_acento
+from Etapa_8 import manejo_datos
 
 ACIERTO = "a"
 ERROR = "e"
+MAX = "FIN"
 
-MAX = "ZZZZZZ"
 ultimo = [MAX, "final"]
-
 
 def leer_archivo(archivo):
     """
@@ -91,7 +91,7 @@ def analizar_respuesta(puntajes, resultado):
         puntajes[2] += -3
     return puntajes
 
-def turno_jugador(jugadores, turno_jugador, posicion, lista_letras, 
+def turno_del_jugador(jugadores, turno_jugador, posicion, lista_letras, 
                     resultados, palabra, definicion, referencias):
     """
     La funcion se encarga de cargar los datos del jugador que tiene el turno de jugar.
@@ -224,7 +224,7 @@ def cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores,
         definicion = datos_rosco[posicion][1]
         letra = palabra[0]
         long_palabra = len(palabra)
-        resultado, palabra_ingresada = turno_jugador(jugadores, turno_jugador, posicion, lista_letras, resultados, palabra, definicion, referencias)
+        resultado, palabra_ingresada = turno_del_jugador(jugadores, turno_jugador, posicion, lista_letras, resultados, palabra, definicion, referencias)
         respuesta = (resultado == ACIERTO)
         resumen_partida.append((letra.upper(), turno_jugador, palabra_ingresada, resultado, palabra))
         referencias[posicion] = str(list(jugadores.keys()).index(turno_jugador) + 1)  # Actualizar la referencia en cada turno
@@ -238,7 +238,6 @@ def cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores,
             turno_jugador = jugadores_keys[(jugadores_keys.index(turno_jugador) + 1) % num_jugadores]
         
     return resumen_partida
-
 #---prueba de doctest!
 def cargar_referencia(jugadores):
     """
@@ -305,7 +304,7 @@ def juego_pasapalabra(archivo):
     if not jugadores:
         print("No hay jugadores registrados. El juego no puede continuar.")
 
-    diccionario_palabra_def= cargar_datos_para_rosco()
+    diccionario_palabra_def= manejo_datos()
     partidas_jugadas = iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def)
     mostrar_reporte_final(partidas_jugadas, jugadores)
 

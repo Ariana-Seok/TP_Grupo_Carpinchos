@@ -11,7 +11,7 @@ implementando así, lo realizado en la etapa 1.
 """
 from dato_rosco import cargar_letras, cargar_palabras_definiciones
 from filtrado_dicc import palabra_sin_acento
-from dicc_archivo import manejo_datos
+from Etapa_8 import manejo_datos
 ACIERTO = "a"
 ERROR = "e"
 
@@ -57,8 +57,7 @@ def analizar_respuesta(dicc_resultados, resultado):
 
     return dicc_resultados
 
-def jugar_turno(resultados_puntaje, posicion,
-                lista_letras, resultados, palabra, definicion):
+def jugar_turno(resultados_puntaje, posicion, lista_letras, resultados, palabra, definicion):
     """
     La funcion recibe 7 parametros los cuales deben ser;
     3 variables de tipo int, 2 listas que sus componentes 
