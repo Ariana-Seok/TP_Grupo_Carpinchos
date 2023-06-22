@@ -10,6 +10,11 @@ ultimo = [MAX, "final"]
 
 
 def leer_archivo(archivo):
+    """
+    La funcion se encargar de leer una linea del archivo correctamente abierto.
+    PRE: Necesitara recibir por parametro un archivo correctamente abierto.
+    POST: Devolvera una lista
+    """
     linea = archivo.readline()
     if linea:
         registro = linea.rstrip("\n").split(";")
@@ -17,8 +22,9 @@ def leer_archivo(archivo):
         registro = ultimo
     return registro
 
-def mostrar_tablero(lista_letras, referencias, resultados, posicion, letra, long_palabra, definicion, jugadores,
-                    turno_jugador, palabra_correcta):
+def mostrar_tablero(lista_letras, referencias, resultados, posicion, letra,
+                    long_palabra, definicion, jugadores,turno_jugador,
+                    palabra_correcta):
     print(f"""
 {''.join(f'[{letra.upper()}]' for letra in lista_letras)}
 {''.join(f'[{referencia}]' for referencia in referencias)}
@@ -45,9 +51,9 @@ def cargar_palabra_valida():
     return palabra_sin_acento(palabra)
 
 def respuesta_verificada():
-    respuesta = palabra_sin_acento(input("¿Deseas seguir jugando? (si/no): ").lower())
+    respuesta = palabra_sin_acento(input("\n¿Deseas seguir jugando? (si/no): ").lower())
     while respuesta != "si" and respuesta != "no":
-        print("Por favor, ingrese 'si' o 'no'")
+        print("\nPor favor, ingrese 'si' o 'no'")
         respuesta = palabra_sin_acento(input("¿Deseas seguir jugando? (si/no): ").lower())
     return respuesta
 
@@ -89,7 +95,7 @@ def mostrar_puntaje(jugadores):
         print(f"{referencia}. {jugador} - {puntos} puntos.")
 
 def mostrar_resultados_actual(puntajes_ordenados, jugadores):
-    print("\nPuntaje de la partida:")
+    print("\nPuntaje de la partida:\n")
 
     for jugador, puntaje in puntajes_ordenados:
         referencia = jugadores[jugador]["referencia"]
@@ -121,31 +127,28 @@ def mostrar_resumen_partida(resumen_partida, jugadores):
             print(f"Turno letra {letra_turno} - Jugador {jugador_turno} Palabra de {len(palabra_correcta_turno)} letras - {palabra_ingresada_turno} - error - Palabra correcta: {palabra_correcta_turno}")
         puntajes_ordenados = puntaje_partida_actual(jugador_turno, resultado_turno, puntajes)
     mostrar_resultados_actual(puntajes_ordenados, jugadores)
-    print("\nPuntaje parcial:")
+    print("\nPuntaje parcial:\n")
     mostrar_puntaje(jugadores)
 
 def mostrar_reporte_final(partidas_jugadas, jugadores):
-    print("Reporte Final:")
+    print("\nReporte Final:")
     print(f"Partidas jugadas: {partidas_jugadas}")
 
-    print("Puntaje Final:")
+    print("\nPuntaje Final:")
     mostrar_puntaje(jugadores)
 
 def verificar_resultado(resultado):
     return resultado == ACIERTO
 
-def continuar_partida(partidas_jugadas, jugadores, jugar_pasapalabra):
+
+def continuar_partida(jugar_pasapalabra):
     respuesta = respuesta_verificada()
     if(respuesta == "no"):
         jugar_pasapalabra = False
-        # Mostrar reporte final
-        print("\nReporte Final:")
-        print(f"\nPartidas jugadas: {partidas_jugadas}")
-        print("\nPuntaje Final:")
-        mostrar_puntaje(jugadores)
     return jugar_pasapalabra
 
-def juego_inicializado(datos_rosco, lista_letras, jugadores, resultados, referencias, jugar_pasapalabra, partidas_inicializadas): #Cargar Datos de la partida
+
+def juego_inicializado(datos_rosco, lista_letras, jugadores, resultados, referencias, jugar_pasapalabra): #Cargar Datos de la partida
     resumen_partida = []
     
     posicion = 0
@@ -200,10 +203,9 @@ def iniciar_jugada(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_p
         partidas_jugadas += 1
         lista_letras = dato_rosco.cargar_letras()
         datos_rosco = dato_rosco.cargar_palabras_definiciones(diccionario_palabra_def, lista_letras)
-        resumen_partida = juego_inicializado(datos_rosco, lista_letras, jugadores, resultados, referencias, jugar_pasapalabra, partidas_jugadas)
+        resumen_partida = juego_inicializado(datos_rosco, lista_letras, jugadores, resultados, referencias, jugar_pasapalabra)
         mostrar_resumen_partida(resumen_partida, jugadores)
-        jugar_pasapalabra = continuar_partida(partidas_jugadas, jugadores, jugar_pasapalabra)
-
+        jugar_pasapalabra = continuar_partida(jugar_pasapalabra)
     return partidas_jugadas
     
 def juego_rosco(archivo):
