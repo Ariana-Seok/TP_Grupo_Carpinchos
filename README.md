@@ -1,5 +1,7 @@
 # TP_Carpichos
 
+Link del repositorio: https://github.com/Ariana-Seok/TP_Grupo_Carpinchos
+
 La parte 1 se encargo Christopher y Joaquin
 
 La parte 2 y 3 se encargo Kevin y Dani
