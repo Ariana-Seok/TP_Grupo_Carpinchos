@@ -168,7 +168,7 @@ def iniciar_sesion():
         messagebox.showerror("Error", "Usuario o contraseña incorrectos.")
 
     if len(usuarios_iniciaron_sesion) == 4:
-        asignar_turnos()
+        root.destroy()
 
 # Configuración de la ventana de inicio de sesion
 root = tk.Tk()
