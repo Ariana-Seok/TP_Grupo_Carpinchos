@@ -1,5 +1,7 @@
 """Importamos el diccionario que necesitamos"""
+# ETAPA 1
 #import diccionario_etapa1
+
 dicc = {"casa": "lugar donde vives", "perro": "animal domestico", "gato": "animal domestico"}
 
 def mostrar_tablero(aciertos, errores, posicion, lista, lista_2):

@@ -1,6 +1,7 @@
+# Etapa 8 - Archivos de Texto
+
 from filtrado_dicc import palabra_sin_acento
-LONGITUD_PALABRA_MINIMA = 4
-MAX = "ZZZZZZ"
+MAX = "ZZZZ"
 
 def leer_archivo(archivo):
     """
@@ -23,7 +24,7 @@ def cargar_archivo(archivo, palabra, definicion):
     """
     archivo.write(palabra + "," + definicion + "\n")
 
-def cargar_palabras_definiciones(arPalabra, arDefiniciones):
+def cargar_palabras_definiciones(arPalabra, arDefiniciones, long_palabra):
     """
     La funcion se encarga de crear una lista auxiliar con las palabras definiciones
     candidatas para el juego.
@@ -34,7 +35,7 @@ def cargar_palabras_definiciones(arPalabra, arDefiniciones):
     definicion = leer_archivo(arDefiniciones)
     lista_aux = []
     while(palabra != MAX) and (definicion != MAX):
-        if(palabra.isalpha()) and (len(palabra) >= LONGITUD_PALABRA_MINIMA):
+        if(palabra.isalpha()) and (len(palabra) >= long_palabra):
             lista = [palabra_sin_acento(palabra), definicion]
             lista_aux.append(lista)
             palabra = leer_archivo(arPalabra)
@@ -79,7 +80,7 @@ def cargar_datos(diccionario_datos, archivo):
             cargar_archivo(archivo, columna1, columna2)
             i += 1
 
-def manejo_datos():
+def manejo_datos(long_palabra):
     """
     Esta funcion se encarga de abrir los archivos y cerrarlos correctamente luego de la interaccion con ellos.
     La funcion retorna un diccionario con claves ordenadas alfabeticamente
@@ -87,7 +88,7 @@ def manejo_datos():
     palabras = open("Archivos de Texto a Utilizar - TP Grupal-20230619\palabras.txt", "rt", encoding="utf-8", errors="ignore")
     definiciones = open("Archivos de Texto a Utilizar - TP Grupal-20230619\definiciones.txt", "rt", encoding="utf-8", errors="ignore")
     datos = open("diccionario.csv", "w", encoding="utf-8", errors="ignore")
-    lista_aux = cargar_palabras_definiciones(palabras, definiciones)
+    lista_aux = cargar_palabras_definiciones(palabras, definiciones, long_palabra)
     diccionario_rosco = cargar_diccionario(lista_aux)
     cargar_datos(diccionario_rosco, datos)
     palabras.close()

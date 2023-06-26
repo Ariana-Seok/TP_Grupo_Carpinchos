@@ -1,6 +1,8 @@
+# Integracion de todas las partes 
 import dato_rosco
 from filtrado_dicc import palabra_sin_acento
-from Etapa_8 import manejo_datos
+from diccionarioArchivo import manejo_datos
+from registracion_jugadores import asignar_turnos
 
 ACIERTO = "a"
 ERROR = "e"
@@ -71,7 +73,7 @@ def respuesta_verificada():
         respuesta = palabra_sin_acento(input("¿Deseas seguir jugando? (si/no): ").lower())
     return respuesta
 #---prueba de doctest!
-def analizar_respuesta(puntajes, resultado):
+def analizar_respuesta(puntajes, resultado, puntaje_acierto, puntaje_desacierto):
     """
     La funcion se encarga de sumar o restar valores a las componentes que tenga dicha lista ya inicializada.
     PRE: Se debe recibir por parametros una lista inicializada con componentes de tipo int, y una variable de tipo str.
@@ -85,14 +87,14 @@ def analizar_respuesta(puntajes, resultado):
     """
     if (resultado == ACIERTO):
         puntajes[0] += 1
-        puntajes[2] += 10
+        puntajes[2] += puntaje_acierto
     else:
         puntajes[1] += 1
-        puntajes[2] += -3
+        puntajes[2] -= puntaje_desacierto
     return puntajes
 
 def turno_del_jugador(jugadores, turno_jugador, posicion, lista_letras, 
-                    resultados, palabra, definicion, referencias):
+                    resultados, palabra, definicion, referencias, puntaje_acierto, puntaje_desacierto):
     """
     La funcion se encarga de cargar los datos del jugador que tiene el turno de jugar.
     PRE: Recibe por parametros variables ya inicializadas.
@@ -109,7 +111,7 @@ def turno_del_jugador(jugadores, turno_jugador, posicion, lista_letras,
     resultado = ACIERTO if palabra_ingresada == palabra else ERROR
     resultados[posicion] = resultado
     referencias[posicion] = str(list(jugadores.keys()).index(turno_jugador) + 1)
-    resultados_puntaje = analizar_respuesta(resultados_puntaje, resultado)
+    resultados_puntaje = analizar_respuesta(resultados_puntaje, resultado, puntaje_acierto, puntaje_desacierto)
 
     # Actualizar puntajes del jugador actual
     jugador_actual["aciertos"] += resultados_puntaje[0]
@@ -141,7 +143,7 @@ def mostrar_resultados_partida_actual(puntajes_ordenados, jugadores):
         referencia = jugadores[jugador]["referencia"]
         print(f"{referencia}. {jugador} - {puntaje} puntos")
 
-def puntaje_partida_actual(jugador, resultado_turno, puntajes):
+def puntaje_partida_actual(jugador, resultado_turno, puntajes, puntaje_acierto, puntaje_desacierto):
     """
     La funcion se encarga verificar los resultados obtenidos de la ronda completada y cargar sus respectivos valores.
     PRE: Recibe por parametros dos variables de tipo str y una variable de tipo dict.
@@ -150,13 +152,13 @@ def puntaje_partida_actual(jugador, resultado_turno, puntajes):
     if (jugador not in puntajes) :
         puntajes[jugador] = 0
     if (resultado_turno == ACIERTO):
-        puntajes[jugador] += 10
+        puntajes[jugador] += puntaje_acierto
     elif(resultado_turno == ERROR):
-        puntajes[jugador] -= 3
-    puntajes_ordenados = sorted(puntajes.items(), key=lambda x: x[1], reverse=True)
+        puntajes[jugador] -= puntaje_desacierto
+    puntajes_ordenados = sorted(puntajes.items(), key=lambda x: x[0], reverse=False)
     return puntajes_ordenados
 
-def mostrar_resumen_partida(resumen_partida, jugadores):
+def mostrar_resumen_partida(resumen_partida, jugadores, puntaje_acierto, puntaje_desacierto):
     """
     La funcion se encarga de mostrar el resumen de la partida: Indica que palabras ingreso el usuario,
     y si fueron incorrectas muestra que palabra se esperaba, en caso contrario solo muestra la palabra.
@@ -175,7 +177,7 @@ def mostrar_resumen_partida(resumen_partida, jugadores):
         elif resultado_turno == ERROR:
             palabras_ingresadas[jugador_turno] += len(palabra_correcta_turno)
             print(f"Turno letra {letra_turno} - Jugador {jugador_turno} Palabra de {len(palabra_correcta_turno)} letras - {palabra_ingresada_turno} - error - Palabra correcta: {palabra_correcta_turno}")
-        puntajes_ordenados = puntaje_partida_actual(jugador_turno, resultado_turno, puntajes)
+        puntajes_ordenados = puntaje_partida_actual(jugador_turno, resultado_turno, puntajes, puntaje_acierto, puntaje_desacierto)
     mostrar_resultados_partida_actual(puntajes_ordenados, jugadores)
     print("\nPuntaje parcial:\n")
     mostrar_puntaje_jugadores(jugadores)
@@ -206,7 +208,7 @@ def continuar_partida(jugar_pasapalabra):
     return jugar_pasapalabra
 
 def cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores,
-                                resultados, referencias, jugar_pasapalabra):
+                                resultados, referencias, jugar_pasapalabra, puntaje_acierto, puntaje_desacierto):
     """
     Esta funcion se encarga de realizar la partida, y cargar los datos de la partida en la lista "resumen_partida".
     Esta funcion dejara de iterar siempre y cuando la variable "jugar_pasapalabra" almacene "False" o si se sobre pasa
@@ -224,7 +226,7 @@ def cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores,
         definicion = datos_rosco[posicion][1]
         letra = palabra[0]
         long_palabra = len(palabra)
-        resultado, palabra_ingresada = turno_del_jugador(jugadores, turno_jugador, posicion, lista_letras, resultados, palabra, definicion, referencias)
+        resultado, palabra_ingresada = turno_del_jugador(jugadores, turno_jugador, posicion, lista_letras, resultados, palabra, definicion, referencias, puntaje_acierto, puntaje_desacierto)
         respuesta = (resultado == ACIERTO)
         resumen_partida.append((letra.upper(), turno_jugador, palabra_ingresada, resultado, palabra))
         referencias[posicion] = str(list(jugadores.keys()).index(turno_jugador) + 1)  # Actualizar la referencia en cada turno
@@ -258,38 +260,33 @@ def cargar_referencia(jugadores):
         referencia += 1
     return jugadores
 
-def cargar_jugadores(jugadores, archivo):
-    """
-    Esta funcion se encarga de leer un archivo correctamente y segun
-    la lectura de cierta linea se van cargando a un diccionario.
-    """
-    datos = leer_archivo(archivo)
-    while(datos != ultimo):
-        jugador = datos[0]
+def cargar_jugadores(lista_jugadores, jugadores):
+    for jugador in lista_jugadores:
         jugadores[jugador] = {"referencia": 0, "aciertos": 0, "errores": 0, "puntos": 0, "resultados": [], "palabras_ingresadas": []}
-        datos = leer_archivo(archivo)
     return jugadores
 
-def iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def):
+def iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def, max_partidas, puntaje_acierto, puntaje_desacierto, cant_letras_rosco):
     """
     La funcion se encarga interactiva con todos los datos de la partida, desde el cargado de letras,
     para el rosco, las palabras y definiciones para el rosco, mostrar el resumen, siempre y cuando 
     "jugar_pasapalabra" tenga almacenano "True", en caso contrario el juego no seguira.
     Otro de los requisitos para que inicie el juego es que debe tener almenos un jugador.
     """
-    while jugar_pasapalabra and (len(jugadores) > 0):
-        resultados = [" " for i in range(10)]
-        referencias = [" " for i in range(10)]
+    while (partidas_jugadas < max_partidas)and jugar_pasapalabra and (len(jugadores) > 0):
+        resultados = [" " for i in range(cant_letras_rosco)]
+        referencias = [" " for i in range(cant_letras_rosco)]
         print("\n-----  Comienza el Juego ------")
         partidas_jugadas += 1
-        lista_letras = dato_rosco.cargar_letras()
+        lista_letras = dato_rosco.cargar_letras(cant_letras_rosco)
         datos_rosco = dato_rosco.cargar_palabras_definiciones(diccionario_palabra_def, lista_letras)
-        resumen_partida = cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores, resultados, referencias, jugar_pasapalabra)
-        mostrar_resumen_partida(resumen_partida, jugadores)
-        jugar_pasapalabra = continuar_partida(jugar_pasapalabra)
+        resumen_partida = cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores, resultados, referencias, jugar_pasapalabra, puntaje_acierto, puntaje_desacierto)
+        mostrar_resumen_partida(resumen_partida, jugadores, puntaje_acierto, puntaje_desacierto)
+        if not(partidas_jugadas == max_partidas):
+            jugar_pasapalabra = continuar_partida(jugar_pasapalabra)
+        
     return partidas_jugadas
-    
-def juego_pasapalabra(archivo):
+
+def juego_pasapalabra(lista_jugadores, max_partidas, puntaje_acierto, puntaje_desacierto, max_long_palabra, cant_letras_rosco):
     """
     Esta funcion se encarga de cargar a los jugadores que jugaran al pasapalabra, 
     asimismo tambien se encarga de llamar a la funcion iniciar_juego para pasarle los datos de
@@ -300,20 +297,22 @@ def juego_pasapalabra(archivo):
     jugar_pasapalabra = True
     partidas_jugadas = 0
     
-    jugadores = cargar_referencia(cargar_jugadores(jugadores, archivo))
+    jugadores = cargar_referencia(cargar_jugadores(lista_jugadores, jugadores))
     if not jugadores:
         print("No hay jugadores registrados. El juego no puede continuar.")
 
-    diccionario_palabra_def= manejo_datos()
-    partidas_jugadas = iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def)
+    diccionario_palabra_def= manejo_datos(max_long_palabra)
+    partidas_jugadas = iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def, max_partidas, puntaje_acierto, puntaje_desacierto, cant_letras_rosco)
+
     mostrar_reporte_final(partidas_jugadas, jugadores)
 
-def main():
-    try:
-        archivo_jugadores = open("usuarios.csv", "r")
-        juego_pasapalabra(archivo_jugadores)
-        archivo_jugadores.close()
-    except FileNotFoundError:
-        print("El archivo 'usuarios.csv' no se encontró.")
+def jugar(configuraciones):
+    jugadores = asignar_turnos()
+    configuracion = [configuracion for configuracion in configuraciones.items()]
+    max_long_palabra = int(configuracion[0][1])
+    cant_letras_rosco = int(configuracion[1][1])
+    max_partidas = int(configuracion[2][1])
+    puntaje_acierto = int(configuracion[3][1])
+    puntaje_desacierto = int(configuracion[4][1])
+    juego_pasapalabra(jugadores, max_partidas, puntaje_acierto, puntaje_desacierto, max_long_palabra, cant_letras_rosco)
 
-main()

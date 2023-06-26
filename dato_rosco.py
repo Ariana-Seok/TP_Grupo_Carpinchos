@@ -16,11 +16,12 @@ Lista de letras que deben procesar:
 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
 'x', 'y', 'z']
 """
+# ETAPA 3 - Eleccion de las palabras candidatas para formar el "rosco".
 import random
 #from filtrado_dicc import cargar_datos_para_rosco
 
 
-def cargar_letras():
+def cargar_letras(cant_letras_rosco):
     """
     La funcion retorna una lista de 10 letras aleatorias 
     que estan ordenadas alfabeticamente sin repetirse entre
@@ -30,7 +31,7 @@ def cargar_letras():
             'g', 'h', 'i', 'j', 'k', 'l', 'm',\
             'n', 'ñ', 'o', 'p', 'q', 'r', 's', \
             't', 'u', 'v', 'w', 'x', 'y', 'z']
-    lista_letras = random.sample(letras, k=10)
+    lista_letras = random.sample(letras, k = cant_letras_rosco)
     return sorted(lista_letras, key=lambda x: x.replace("ñ", "n~"))
 
 """

@@ -9,9 +9,12 @@ La secuencia del juego debe ser la siguiente:
 4. Luego se armará el tablero que visualizará el usuario, y dará comienzo la partida,
 implementando así, lo realizado en la etapa 1.
 """
+# Etapa 4 - Integracion
+# Etapa 6 - Refactorizacion del Codigo de la Parte 1
+
 from dato_rosco import cargar_letras, cargar_palabras_definiciones
 from filtrado_dicc import palabra_sin_acento
-from Etapa_8 import manejo_datos
+from diccionarioArchivo import manejo_datos
 ACIERTO = "a"
 ERROR = "e"
 
@@ -145,13 +148,15 @@ def respuesta_verificada():
     return respuesta
 
 def jugar_rosco():
+    long_palabra = 5
     resultado = [" " for i in range(10)]
     continuar_jugando = True
     puntaje_total = 0
-    diccionario_datos_rosco = manejo_datos()
+    diccionario_datos_rosco = manejo_datos(long_palabra)
 
     while continuar_jugando:
-        lista_letras = cargar_letras()
+        cant_letras = 10
+        lista_letras = cargar_letras(cant_letras)
         palabras_definiciones = cargar_palabras_definiciones(diccionario_datos_rosco, lista_letras)
         puntaje_partida = juego_inicializado(palabras_definiciones, lista_letras, resultado)
         puntaje_total += puntaje_partida
