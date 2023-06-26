@@ -123,7 +123,7 @@ def cerrar_ventana():
 
 def asignar_turnos():
     """
-    Obtiene una lista de 4 usuarios registrados seleccionados de manera aleatoria y los asigna a los turnos de juego.
+    Obtiene una lista de los usuarios que iniciaron sesion y seleccionados de manera aleatoria con el ramdom.suffle y los asigna a los turnos de juego.
     """
     global usuarios_iniciaron_sesion
     usuarios = usuarios_iniciaron_sesion

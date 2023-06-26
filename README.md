@@ -18,4 +18,4 @@ La parte 8 se encargo Dani
 
 La parte 9 se encargo Christofer y Dani
 
-La parte 10 se encargo Kevin y Dani 
+La parte 10 se encargo Kevin, Dani y Joaquin
