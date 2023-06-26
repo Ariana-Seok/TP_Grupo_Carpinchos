@@ -181,7 +181,7 @@ def cargar_configuracion_archivo(configuraciones):
     PRE: La funcion recibe un parametro el cual es un diccionario inicializado
     POST: La funcion se encarga de escribir todo el contenido que contenga el diccionario.
     """
-    with open(r"C:\Users\luzca\Desktop\Nueva_carpeta\TP_Grupo_Carpinchos\archivosCSV\configuracion.csv", "w") as archivo:
+    with open("archivosCSV\configuracion.csv", "w") as archivo:
         for configuracion in configuraciones:
             archivo.write(configuracion + "," + str(configuraciones[configuracion]) + "\n")
 
@@ -249,7 +249,7 @@ def main():
         "PUNTAJE_ACIERTO": 10,
         "PUNTAJE_DESACIERTO": 3
         }
-    with open(r"C:\Users\luzca\Desktop\Nueva_carpeta\TP_Grupo_Carpinchos\archivosCSV\configuracion.csv", "r+") as configuracion:    
+    with open("archivosCSV\configuracion.csv", "r+") as configuracion:    
         configuraciones = cargar_configuraciones(configuracion)
         mostrar_menu_principal(configuraciones, config_por_defecto)
     
