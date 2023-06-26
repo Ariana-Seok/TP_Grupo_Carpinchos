@@ -75,6 +75,8 @@ def guardar_usuario():
             mensaje_error = "La contraseña debe contener al menos uno de los caracteres especiales '#!'."
         elif any(caracter in "áéíóúÁÉÍÓÚ" for caracter in contrasena):
             mensaje_error = "La contraseña no puede contener letras acentuadas."
+        if contrasena != confirmar_contrasena:  
+            mensaje_error = "Las contraseñas no coinciden."
 
         # Verificar si el usuario ya está registrado
         elif validar_usuario(usuario):
