@@ -148,6 +148,14 @@ def puntaje_partida_actual(jugador, resultado_turno, puntajes, puntaje_acierto, 
     La funcion se encarga verificar los resultados obtenidos de la ronda completada y cargar sus respectivos valores.
     PRE: Recibe por parametros dos variables de tipo str y una variable de tipo dict.
     POST: Devuelve una lista ordenada dependiendo de su puntaje
+    >>> puntaje_partida_actual("jugador1", "a", {"jugador1": 0}, 10, 5)
+    [('jugador1', 10)]
+
+    >>> puntaje_partida_actual("jugador2", "e", {"jugador1": 10, "jugador2": 5}, 10, 5)
+    [('jugador1', 10), ('jugador2', 0)]
+
+    >>> puntaje_partida_actual("jugador3", "a", {"jugador1": 10, "jugador2": 0, "jugador3": 0}, 10, 5)
+    [('jugador1', 10), ('jugador2', 0), ('jugador3', 10)]
     """
     if (jugador not in puntajes) :
         puntajes[jugador] = 0
@@ -189,6 +197,18 @@ def mostrar_reporte_final(partidas_jugadas, jugadores):
     PRE: La funcion recibe una variable de tipo int y un diccionario ya cargado.
     POST: Muestra por pantalla los puntajes finales.
     """
+    """
+    >>> jugadores = {'Juan': 10, 'María': 15, 'Pedro': 8}
+    >>> mostrar_reporte_final(5, jugadores)
+    Reporte Final:
+    Partidas jugadas: 5
+
+    Puntaje Final:
+    Jugador: Juan - Puntos: 10
+    Jugador: María - Puntos: 15
+    Jugador: Pedro - Puntos: 8
+    """
+
     print("\nReporte Final:")
     print(f"Partidas jugadas: {partidas_jugadas}")
 
@@ -316,3 +336,5 @@ def jugar(configuraciones):
     puntaje_desacierto = int(configuracion[4][1])
     juego_pasapalabra(jugadores, max_partidas, puntaje_acierto, puntaje_desacierto, max_long_palabra, cant_letras_rosco)
 
+import doctest
+doctest.testmod()

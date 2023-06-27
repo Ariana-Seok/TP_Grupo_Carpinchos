@@ -1,6 +1,7 @@
 # TP_Carpichos
 
 Link del repositorio: https://github.com/Ariana-Seok/TP_Grupo_Carpinchos
+Link del drive con los 2 videos: https://drive.google.com/drive/folders/19sEVhEkRopXqXhd46ONg9J2jBJMmddC1?usp=drive_link
 
 La parte 1 se encargo Christopher y Joaquin
 

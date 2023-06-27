@@ -242,6 +242,15 @@ def mostrar_menu_principal(configuraciones, config_por_defecto):
         configuraciones = modificar_configuraciones(configuraciones, config_por_defecto)
 
 def main():
+    """
+    Función principal del programa
+    
+    >>> main()
+    -- Bienvenido al menu principal del Pasapalabra --
+
+    0. Iniciar Partida
+    1. Configuraciones
+    """
     config_por_defecto = {
         "LONGITUD_PALABRA_MINIMA": 4,
         "CANTIDAD_LETRAS_ROSCO":10,
@@ -254,3 +263,6 @@ def main():
         mostrar_menu_principal(configuraciones, config_por_defecto)
     
 main()
+
+import doctest
+doctest.testmod()

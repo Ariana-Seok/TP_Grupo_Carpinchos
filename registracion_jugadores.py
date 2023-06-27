@@ -13,6 +13,12 @@ def validar_usuario(usuario, registro_actual=None):
     """
     El objetivo de esta función es verificar si un usuario ya está registrado en el archivo CSV de usuarios.
     """
+    """
+    >>> validar_usuario("usuario1")
+    False
+    >>> validar_usuario("usuario2", registro_actual=["usuario2", "contraseña"])
+    True
+    """
     result = False
     encontrado = False
 
@@ -213,3 +219,7 @@ iniciar_partida_button = tk.Button(root, text="Iniciar partida", command=cerrar_
 iniciar_partida_button.place(x=99, y=154)
 
 root.mainloop()
+
+
+import doctest
+doctest.testmod()
