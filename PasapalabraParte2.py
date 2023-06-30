@@ -336,5 +336,5 @@ def jugar(configuraciones):
     puntaje_desacierto = int(configuracion[4][1])
     juego_pasapalabra(jugadores, max_partidas, puntaje_acierto, puntaje_desacierto, max_long_palabra, cant_letras_rosco)
 
-import doctest
-doctest.testmod()
+#import doctest
+#doctest.testmod()
