@@ -52,6 +52,10 @@ def cargar_diccionario(lista_aux):
     [palabra(str), defincion(str)]
     PRE: La funcion debe recibir una lista cargada.
     POST: La funcion devuelve un diccionario.
+    >>> cargar_diccionario([['abominable', 'adj. Digno de ser abominado'], ['acelerar', 'Dar celeridad']])
+    {'a': [['abominable', 'adj. Digno de ser abominado'], ['acelerar', 'Dar celeridad']]}
+    >>> cargar_diccionario([['adorable', 'adj. Digno de adoración'], ['belleza', 'f. Cualidad de bello']])
+    {'a': [['adorable', 'adj. Digno de adoración']], 'b': [['belleza', 'f. Cualidad de bello']]}
     """
     diccionario_datos = {}
     for palabra, definicion in lista_aux:
@@ -96,3 +100,5 @@ def manejo_datos(long_palabra):
     datos.close()
     return diccionario_rosco
 
+import doctest
+print(doctest.testmod())
