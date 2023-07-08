@@ -57,6 +57,11 @@ def si_no_es_numero(opcion):
     en caso contrario solicitara el dato hasta que sea valido.
     PRE: La funcion debe recibir por parametro la variable "opcion" ya cargada
     POST: La funcion devuelve la variable "opcion" con un valor valido de tipo int
+    >>> si_no_es_numero("abc")
+    Ingrese solo NUMEROS: 0
+    >>> si_no_es_numero("1234")
+    Ingrese solo NUMEROS: 1
+
     """
     while not (opcion.isdigit()):
         opcion = input("Ingrese solo NUMEROS: ")
@@ -79,6 +84,13 @@ def si_no_es_valido(opcion, max_long, min_long):
 def cargar_opcion(min_long, max_long):
     """
     Esta funcion se encarga de cargar el valor para la variable "opcion".
+    >>> min_long = 1
+    >>> max_long = 10
+    >>> cargar_opcion(min_long, max_long)
+    Ingrese un numero (1 - 10): abc
+    Ingrese solo NUMEROS: 15
+    Ingrese NUMEROS entre (1 - 10): 12
+    Ingrese NUMEROS entre (1 - 10): 7
     """
     opcion = input(f"Ingrese un numero ({min_long} - {max_long}): ")
     opcion = si_no_es_numero(opcion)
@@ -121,6 +133,12 @@ def modificar_maxima_partidas(configuraciones):
     PRE: La funcion debe recibir un diccionario inicializado
     POST: La funcion debe modificar el valor de la clave 
     "MAXIMO_PARTIDAS"
+    >>> configuraciones = {"MAXIMO_PARTIDAS": 5, "PUNTAJE_ACIERTO": 10, "PUNTAJE_DESACIERTO": 5}
+    >>> modificar_maxima_partidas(configuraciones)
+    Ingrese la cantidad de maxima partidas: 10
+    Se modifico la CANTIDAD DE MAXIMA PARTIDAS a: 10
+    >>> configuraciones["MAXIMO_PARTIDAS"]
+    10
     """
     cant_partidas_deseadas = input("Ingrese la cantidad de maxima partidas: ")
     cant_partidas_deseadas = si_no_es_numero(cant_partidas_deseadas)
@@ -134,6 +152,12 @@ def modificar_puntaje_acierto(configuraciones):
     PRE: La funcion debe recibir un diccionario inicializado
     POST: La funcion debe modificar el valor de la clave 
     "PUNTAJE_ACIERTO"
+    >>> configuraciones = {"PUNTAJE_ACIERTO": 10, "PUNTAJE_DESACIERTO": 5}
+    >>> modificar_puntaje_acierto(configuraciones)
+    Ingrese el puntaje acierto: 15
+    Se modifico el PUNTAJE ACIERTO a: 15
+    >>> configuraciones["PUNTAJE_ACIERTO"]
+    15
     """
     puntaje_acierto_deseado = input("Ingrese el puntaje acierto: ")
     puntaje_acierto_deseado = si_no_es_numero(puntaje_acierto_deseado)
@@ -263,6 +287,6 @@ def main():
         mostrar_menu_principal(configuraciones, config_por_defecto)
 main()
 
-#import doctest
-#print(doctest.testmod())
+import doctest
+print(doctest.testmod())
 
