@@ -22,7 +22,8 @@ def leer_archivo(archivo):
 
 def validar_usuario(usuario, registro_actual=None):
     """
-    El objetivo de esta función es verificar si un usuario ya está registrado en el archivo CSV de usuarios.
+    El objetivo de esta función es verificar si un usuario ya 
+    está registrado en el archivo CSV de usuarios.
     """
     """
     >>> validar_usuario("usuario1")
@@ -44,6 +45,13 @@ def validar_usuario(usuario, registro_actual=None):
     return result
 
 def comprobar_nombre_usuario(usuario, mensajes_error, errores):
+    """
+    Esta funcion se encarga de verificar si en la variable usuario,
+    tiene almacenado la cadena de caracteres valida.
+    PRE: La funcion recibe 3 parametros: un string, un diccionario y una lista
+    todas inicializadas.
+    POST: Devuelve la lista "errores".
+    """
     i = 0
     contrasenia_valida = True
     simbolo_valido = "-"
@@ -64,9 +72,19 @@ def comprobar_nombre_usuario(usuario, mensajes_error, errores):
 
     if not(cant_num > 0) or not (cant_letras > 0) or not (cant_simbolo > 0) or not (contrasenia_valida):
         errores.append(mensajes_error["usuario_invalido"])
+
     return errores
 
 def usuario_valido(mensajes_error, usuario, errores):
+    """
+    La funcion se encarga de de verificar que se cumplan
+    los requisitos que necesita la variable "usuario".
+    Dependiendo el caso se cargara a la lista "errores"
+    las cosas que le lleguen a faltar.
+    PRE: Recibe 3 parametros inicializados: un diccionario,
+    un string y una lista.
+    POST: Devuelve la lista "errores".
+    """
     MAX_LONG = 20
     MIN_LONG = 4
     if (len(usuario) < MIN_LONG) or (len(usuario) > MAX_LONG):
@@ -76,6 +94,14 @@ def usuario_valido(mensajes_error, usuario, errores):
     return errores
 
 def comprobar_contrasenia_valida(mensajes_error, contrasenia, errores):
+    """
+    Esta funcion se encarga de verificar que la variable "contrasenia"
+    este cumpliendo con los requisito necesarios, en caso contrario
+    se almacenan/cargan a la lista "errores" tales faltas
+    PRE: Recibe 3 parametros inicializados; Un diccionario, un string y una lista
+    POST: Devuelve la lista cargada dependiendo de los errores
+    que se presentaron durante la ejecucion.
+    """
     if not any(caracter.isdigit() for caracter in contrasenia):
         errores.append(mensajes_error["contrasena_digitos"])
     elif not any(caracter.islower() for caracter in contrasenia):
@@ -89,6 +115,11 @@ def comprobar_contrasenia_valida(mensajes_error, contrasenia, errores):
     return errores
 
 def contrasenia_valida(mensajes_error, contrasenia, errores):
+    """
+    La funcion se encarga de verificar que la variable "contrasenia"
+    cumpla con los requisitos, en caso contrario se cargara a la lista 
+    "errores" las faltas que se hayan cometido.
+    """
     MAX_LONG_CONTRASENIA = 12
     MIN_LONG_CONTRASENIA = 6
     if(len(contrasenia) < MIN_LONG_CONTRASENIA) or (len(contrasenia) > MAX_LONG_CONTRASENIA):
@@ -98,11 +129,21 @@ def contrasenia_valida(mensajes_error, contrasenia, errores):
     return errores
 
 def verificar_ingreso_contrasenia(confirmar_contrasena, contrasena, mensajes_error, errores):
+    """
+    Esta funcion se encarga de verificar que la contrasena
+    ingresada sea igual a la contrasena, en caso contrario se
+    cargara el mensaje de error a la lista "errores".
+    """
     if (contrasena != confirmar_contrasena):  
         errores.append(mensajes_error["contrasena_coincidencia"])
     return errores
 
 def verificar_usuario_existente(usuario, contrasena, mensajes_error, ventana_registrar, errores):
+    """
+    Esta funcion se encarga verificar que el usuario no exista,
+    en el archivo usuarios.csv en caso contrario mostrara los errores
+    obtenidos en la partida, o cargara el nuevo usuario.
+    """
     if validar_usuario(usuario):
         errores.append(mensajes_error["usuario_existente"])
     elif errores:
@@ -114,10 +155,10 @@ def verificar_usuario_existente(usuario, contrasena, mensajes_error, ventana_reg
         messagebox.showinfo("Éxito", "Usuario registrado exitosamente.")
         ventana_registrar.destroy()
 
-
 def registrar_usuario(usuario_entry, contrasenia_entry, confirmacion_contrasenia_entry, ventana_registrar):
     """
-    Guarda el nombre de usuario y la contraseña en el archivo CSV si cumplen con los requisitos pedidos.
+    Guarda el nombre de usuario y la contraseña en el archivo CSV si 
+    cumplen con los requisitos pedidos.
     Muestra mensajes de error si hay problemas con los datos ingresados.
     """
     usuario = usuario_entry.get()
@@ -142,7 +183,6 @@ def registrar_usuario(usuario_entry, contrasenia_entry, confirmacion_contrasenia
     errores = contrasenia_valida(mensajes_error, contrasena, errores)
     errores = verificar_ingreso_contrasenia(confirmar_contrasena, contrasena, mensajes_error, errores)
     verificar_usuario_existente(usuario, contrasena, mensajes_error, ventana_registrar, errores)
-    
 
 def guardar_usuario():
     #Acá creamos la ventana para registrar usuarios
@@ -173,13 +213,15 @@ def guardar_usuario():
     
 def cerrar_ventana():
     """
-    Funcion que es llamada cuando se pulsa el boton de iniciar partida, cierra la ventana de inicio de sesion.
+    Funcion que es llamada cuando se pulsa el boton de iniciar partida, 
+    cierra la ventana de inicio de sesion.
     """
     root.destroy()
 
 def asignar_turnos():
     """
-    Obtiene una lista de los usuarios que iniciaron sesion y seleccionados de manera aleatoria con el ramdom.suffle y los asigna a los turnos de juego.
+    Obtiene una lista de los usuarios que iniciaron sesion y seleccionados de 
+    manera aleatoria con el ramdom.suffle y los asigna a los turnos de juego.
     """
     global usuarios_iniciaron_sesion
     usuarios = usuarios_iniciaron_sesion
@@ -196,12 +238,35 @@ def asignar_turnos():
 
     return turno_jugadores
 
+def verificar_inicio_de_sesion(usuario_encontrado, usuario_en_partida, usuario):
+    """
+    Esta funcion se encarga de verificar si el jugador ya inicio sesion,
+    en caso contrario se permitira el inicio de sesion.
+    Si el usuario no esta en el archivo, se reporta un error.
+    """
+    if usuario_encontrado:
+        if usuario_en_partida:
+            messagebox.showerror("Error", "Este jugador ya se registró en la partida.")
+        else:
+            usuarios_iniciaron_sesion.append(usuario)
+            messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
+            usuario_entry.delete(0, tk.END)
+            contrasenia_entry.delete(0, tk.END)
+            if len(usuarios_iniciaron_sesion) == 4:
+                cerrar_ventana()
+    else:
+        messagebox.showerror("Error", "Usuario o contraseña incorrectos.")
+
+
 def iniciar_sesion():
     """
-    Esta función se llama cuando se hace clic en el botón "Iniciar Sesión". Abre una ventana donde el usuario 
-    puede ingresar su nombre de usuario y contraseña. Luego, se verifica si coinciden con los datos registrados.
-    Si la validación es exitosa, se muestra un mensaje de éxito y se permite el inicio de sesión. Se cuenta 
-    el número de inicios de sesión exitosos y cuando se alcanza el límite de 4, se muestra la ventana de turnos.
+    Esta función se llama cuando se hace clic en el botón "Iniciar Sesión". 
+    Abre una ventana donde el usuario puede ingresar su nombre de usuario y
+    contraseña. Luego, se verifica si coinciden con los datos registrados.
+    Si la validación es exitosa, se muestra un mensaje de éxito y se permite 
+    el inicio de sesión. Se cuenta 
+    el número de inicios de sesión exitosos y cuando se alcanza el límite de 4,
+    se muestra la ventana de turnos.
     """
     usuario = usuario_entry.get()
     contrasena = contrasenia_entry.get()
@@ -218,21 +283,9 @@ def iniciar_sesion():
                 if (usuario in usuarios_iniciaron_sesion):
                     usuario_en_partida = True
 
-    if usuario_encontrado:
-        if usuario_en_partida:
-            messagebox.showerror("Error", "Este jugador ya se registró en la partida.")
-        else:
-            usuarios_iniciaron_sesion.append(usuario)
-            messagebox.showinfo("Éxito", "Inicio de sesión exitoso.")
-            usuario_entry.delete(0, tk.END)
-            contrasenia_entry.delete(0, tk.END)
-            if len(usuarios_iniciaron_sesion) == 4:
-                root.destroy()
-    else:
-        messagebox.showerror("Error", "Usuario o contraseña incorrectos.")
-
-    if len(usuarios_iniciaron_sesion) == 4:
-        root.destroy()
+    verificar_inicio_de_sesion(usuario_encontrado, usuario_en_partida, usuario)
+    
+    
 
 # Configuración de la ventana de inicio de sesion
 root = tk.Tk()
