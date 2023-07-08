@@ -1,6 +1,7 @@
 # ETAPA 10 - Archivo de Configuraciones
 
 from Pasapalabra import jugar 
+from registracion_jugadores import asignar_turnos
 MAX = "fin,0"
 
 def leer_archivo(archivo):
@@ -261,7 +262,6 @@ def main():
     with open("archivosCSV\configuracion.csv", "r+") as configuracion:    
         configuraciones = cargar_configuraciones(configuracion)
         mostrar_menu_principal(configuraciones, config_por_defecto)
-    
 main()
 
 #import doctest
