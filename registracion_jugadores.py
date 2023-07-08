@@ -233,9 +233,9 @@ def asignar_turnos():
     for i, usuario in enumerate(usuarios):
         mensaje_turnos += f"Turno {i+1}: {usuario}\n"
         turno_jugadores.append(usuario)
-
-    messagebox.showinfo("Asignación de Turnos", mensaje_turnos)
-
+    if turno_jugadores:
+        messagebox.showinfo("Asignación de Turnos", mensaje_turnos)
+    
     return turno_jugadores
 
 def verificar_inicio_de_sesion(usuario_encontrado, usuario_en_partida, usuario):

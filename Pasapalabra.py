@@ -1,5 +1,5 @@
 # Integracion de todas las partes 
-import datos_rosco
+import dato_rosco
 from Ar_diccionario import manejo_datos
 from registracion_jugadores import asignar_turnos
 
@@ -58,7 +58,7 @@ def cargar_palabra_valida():
     while not palabra.isalpha():
         print("Ingrese solo LETRAS!")
         palabra = input("Ingrese la palabra: ").lower()
-    return datos_rosco.palabra_sin_acento(palabra)
+    return dato_rosco.palabra_sin_acento(palabra)
 
 def respuesta_verificada():
     """
@@ -66,10 +66,10 @@ def respuesta_verificada():
     PRE: La variable "respuesta" solo almacenara algo de tipo str (las cuales seran "si" o "no")
     POST: Devuelve a la variable respuesta ya cargada.
     """
-    respuesta = datos_rosco.palabra_sin_acento(input("\n¿Deseas seguir jugando? (si/no): ").lower())
+    respuesta = dato_rosco.palabra_sin_acento(input("\n¿Deseas seguir jugando? (si/no): ").lower())
     while (respuesta != "si") and (respuesta != "no"):
         print("\nPor favor, ingrese 'si' o 'no'")
-        respuesta = datos_rosco.palabra_sin_acento(input("¿Deseas seguir jugando? (si/no): ").lower())
+        respuesta = dato_rosco.palabra_sin_acento(input("¿Deseas seguir jugando? (si/no): ").lower())
     return respuesta
 
 def analizar_respuesta(puntajes, resultado, puntaje_acierto, puntaje_desacierto):
@@ -323,8 +323,8 @@ def iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores,
         referencias = [" " for i in range(cant_letras_rosco)]
         print("\n-----  Comienza el Juego ------")
         partidas_jugadas += 1
-        lista_letras = datos_rosco.cargar_letras(cant_letras_rosco)
-        datos_rosco = datos_rosco.cargar_palabras_definiciones(diccionario_palabra_def, lista_letras)
+        lista_letras = dato_rosco.cargar_letras(cant_letras_rosco)
+        datos_rosco = dato_rosco.cargar_palabras_definiciones(diccionario_palabra_def, lista_letras)
         resumen_partida = cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores,
                                                     resultados, referencias, jugar_pasapalabra,
                                                     puntaje_acierto, puntaje_desacierto)
@@ -348,7 +348,9 @@ def juego_pasapalabra(lista_jugadores, max_partidas, puntaje_acierto, puntaje_de
     jugadores = cargar_referencia(cargar_jugadores(lista_jugadores, jugadores))
     if jugadores:
         diccionario_palabra_def= manejo_datos(max_long_palabra)
-        partidas_jugadas = iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def, max_partidas, puntaje_acierto, puntaje_desacierto, cant_letras_rosco)
+        partidas_jugadas = iniciar_juego(jugar_pasapalabra, partidas_jugadas,
+                                jugadores, diccionario_palabra_def, max_partidas,
+                                puntaje_acierto, puntaje_desacierto, cant_letras_rosco)
         mostrar_reporte_final(partidas_jugadas, jugadores)
     else:
         print("No hay jugadores registrados. El juego no puede continuar.")
