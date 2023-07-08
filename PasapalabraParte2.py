@@ -346,13 +346,12 @@ def juego_pasapalabra(lista_jugadores, max_partidas, puntaje_acierto, puntaje_de
     partidas_jugadas = 0
     
     jugadores = cargar_referencia(cargar_jugadores(lista_jugadores, jugadores))
-    if not jugadores:
+    if jugadores:
+        diccionario_palabra_def= manejo_datos(max_long_palabra)
+        partidas_jugadas = iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def, max_partidas, puntaje_acierto, puntaje_desacierto, cant_letras_rosco)
+        mostrar_reporte_final(partidas_jugadas, jugadores)
+    else:
         print("No hay jugadores registrados. El juego no puede continuar.")
-
-    diccionario_palabra_def= manejo_datos(max_long_palabra)
-    partidas_jugadas = iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores, diccionario_palabra_def, max_partidas, puntaje_acierto, puntaje_desacierto, cant_letras_rosco)
-
-    mostrar_reporte_final(partidas_jugadas, jugadores)
 
 def jugar(configuraciones):
     jugadores = asignar_turnos()
@@ -363,6 +362,5 @@ def jugar(configuraciones):
     puntaje_acierto = int(configuracion[3][1])
     puntaje_desacierto = int(configuracion[4][1])
     juego_pasapalabra(jugadores, max_partidas, puntaje_acierto, puntaje_desacierto, max_long_palabra, cant_letras_rosco)
-
 #import doctest
 #doctest.testmod()
