@@ -100,5 +100,5 @@ def manejo_datos(long_palabra):
     datos.close()
     return diccionario_rosco
 
-import doctest
-print(doctest.testmod())
+#import doctest
+#print(doctest.testmod())

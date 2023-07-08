@@ -24,25 +24,23 @@ def validar_usuario(usuario, registro_actual=None):
     """
     El objetivo de esta función es verificar si un usuario ya 
     está registrado en el archivo CSV de usuarios.
-    """
-    """
-    >>> validar_usuario("usuario1")
+    >>> validar_usuario('usuario1', registro_actual=['usuario3', 'contraseña'])
     False
-    >>> validar_usuario("usuario2", registro_actual=["usuario2", "contraseña"])
-    True
+    >>> validar_usuario('usuario3', registro_actual=['usuario2', 'contraseña'])
+    False
     """
-    result = False
+    resultado = False
     encontrado = False
 
     with open("archivosCSV\\usuarios.csv", "r") as archivo:
         registro = leer_archivo(archivo)
         while registro and not encontrado:
-            if registro and registro[0] == usuario and registro != registro_actual:
-                result = True
+            if registro and (registro[0] == usuario) and (registro != registro_actual):
+                resultado = True
                 encontrado = True
             registro = leer_archivo(archivo)
 
-    return result
+    return resultado
 
 def comprobar_nombre_usuario(usuario, mensajes_error, errores):
     """
@@ -233,9 +231,10 @@ def asignar_turnos():
     for i, usuario in enumerate(usuarios):
         mensaje_turnos += f"Turno {i+1}: {usuario}\n"
         turno_jugadores.append(usuario)
+    
     if turno_jugadores:
         messagebox.showinfo("Asignación de Turnos", mensaje_turnos)
-    
+
     return turno_jugadores
 
 def verificar_inicio_de_sesion(usuario_encontrado, usuario_en_partida, usuario):
@@ -256,7 +255,6 @@ def verificar_inicio_de_sesion(usuario_encontrado, usuario_en_partida, usuario):
                 cerrar_ventana()
     else:
         messagebox.showerror("Error", "Usuario o contraseña incorrectos.")
-
 
 def iniciar_sesion():
     """
@@ -284,8 +282,7 @@ def iniciar_sesion():
                     usuario_en_partida = True
 
     verificar_inicio_de_sesion(usuario_encontrado, usuario_en_partida, usuario)
-    
-    
+
 
 # Configuración de la ventana de inicio de sesion
 root = tk.Tk()
@@ -330,4 +327,4 @@ iniciar_partida_button.place(x=99, y=154)
 root.mainloop()
 
 #import doctest
-#doctest.testmod()
+#print(doctest.testmod())

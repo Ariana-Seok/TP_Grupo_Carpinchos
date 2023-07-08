@@ -1,5 +1,4 @@
 # ETAPA 10 - Archivo de Configuraciones
-
 from Pasapalabra import jugar 
 from registracion_jugadores import asignar_turnos
 MAX = "fin,0"
@@ -264,5 +263,6 @@ def main():
         mostrar_menu_principal(configuraciones, config_por_defecto)
 main()
 
-#import doctest
-#doctest.testmod()
+import doctest
+print(doctest.testmod())
+

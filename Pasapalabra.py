@@ -77,11 +77,11 @@ def analizar_respuesta(puntajes, resultado, puntaje_acierto, puntaje_desacierto)
     La funcion se encarga de sumar o restar valores a las componentes que tenga dicha lista ya inicializada.
     PRE: Se debe recibir por parametros una lista inicializada con componentes de tipo int, y una variable de tipo str.
     POST: Retorna la lista con sus componentes de tipo int.
-    >>> analizar_respuesta([0, 0, 0], 'a')
+    >>> analizar_respuesta([0, 0, 0], 'a', 10, 3)
     [1, 0, 10]
-    >>> analizar_respuesta([0, 0, 0], 'e')
+    >>> analizar_respuesta([0, 0, 0], 'e', 10, 3)
     [0, 1, -3]
-    >>> analizar_respuesta([1, 2, 4], 'a')
+    >>> analizar_respuesta([1, 2, 4], 'a', 10, 3)
     [2, 2, 14]
     """
     if (resultado == ACIERTO):
@@ -288,14 +288,10 @@ def cargar_referencia(jugadores):
     """
     La funcion se encarga de agregarle un valor a cada clave que 
     contenga el diccionario "jugadores".
-    >>> cargar_referencia({'Laura12!': {'aciertos': 0, 'errores': 1},
-    'Carlozan9!': {'aciertos': 2, 'errores': 1}})
-    {'Laura12!': {'aciertos': 0, 'errores': 1, 'referencia': 1},
-    'Carlozan9!': {'aciertos': 2, 'errores': 1, 'referencia': 2}}
-    >>> cargar_referencia({'Xande312!': {'aciertos': 5, 'errores': 10},
-    'Marcoz10!!9!': {'aciertos': 6, 'errores': 0}})
-    {'Xande312!': {'aciertos': 5, 'errores': 10, 'referencia': 1},
-    'Marcoz10!!9!': {'aciertos': 6, 'errores': 0, 'referencia': 2}}
+    >>> cargar_referencia({'Laura12!': {'aciertos': 0, 'errores': 1}, 'Carlozan9!': {'aciertos': 2, 'errores': 1}})
+    {'Laura12!': {'aciertos': 0, 'errores': 1, 'referencia': 1}, 'Carlozan9!': {'aciertos': 2, 'errores': 1, 'referencia': 2}}
+    >>> cargar_referencia({'Xande312!': {'aciertos': 5, 'errores': 10}, 'Marcoz10!!9!': {'aciertos': 6, 'errores': 0}})
+    {'Xande312!': {'aciertos': 5, 'errores': 10, 'referencia': 1}, 'Marcoz10!!9!': {'aciertos': 6, 'errores': 0, 'referencia': 2}}
     """
     referencia = 1
     for jugador in jugadores.keys():
@@ -304,6 +300,14 @@ def cargar_referencia(jugadores):
     return jugadores
 
 def cargar_jugadores(lista_jugadores, jugadores):
+    """
+    Esta funcion se encarga de cargar a los jugadores en el diccionario
+    jugadores.
+    >>> cargar_jugadores(['ArianaSeok01-'], {})
+    {'ArianaSeok01-': {'referencia': 0, 'aciertos': 0, 'errores': 0, 'puntos': 0, 'resultados': [], 'palabras_ingresadas': []}}
+    >>> cargar_jugadores(['XurkelSeok01-'], {})
+    {'XurkelSeok01-': {'referencia': 0, 'aciertos': 0, 'errores': 0, 'puntos': 0, 'resultados': [], 'palabras_ingresadas': []}}
+    """
     for jugador in lista_jugadores:
         jugadores[jugador] = {"referencia": 0, "aciertos": 0, "errores": 0,
                             "puntos": 0, "resultados": [], "palabras_ingresadas": []}
@@ -364,5 +368,6 @@ def jugar(configuraciones):
     puntaje_acierto = int(configuracion[3][1])
     puntaje_desacierto = int(configuracion[4][1])
     juego_pasapalabra(jugadores, max_partidas, puntaje_acierto, puntaje_desacierto, max_long_palabra, cant_letras_rosco)
+
 #import doctest
-#doctest.testmod()
+#print(doctest.testmod())
