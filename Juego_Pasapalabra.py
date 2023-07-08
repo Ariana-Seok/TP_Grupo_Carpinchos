@@ -263,6 +263,6 @@ def main():
         mostrar_menu_principal(configuraciones, config_por_defecto)
 main()
 
-import doctest
-print(doctest.testmod())
+#import doctest
+#print(doctest.testmod())
 

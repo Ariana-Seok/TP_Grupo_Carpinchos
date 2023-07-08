@@ -136,14 +136,14 @@ def verificar_ingreso_contrasenia(confirmar_contrasena, contrasena, mensajes_err
         errores.append(mensajes_error["contrasena_coincidencia"])
     return errores
 
-def verificar_usuario_existente(usuario, contrasena, mensajes_error, ventana_registrar, errores):
+def verificar_usuario_existente(usuario, contrasena, ventana_registrar, errores):
     """
     Esta funcion se encarga verificar que el usuario no exista,
     en el archivo usuarios.csv en caso contrario mostrara los errores
     obtenidos en la partida, o cargara el nuevo usuario.
     """
     if validar_usuario(usuario):
-        errores.append(mensajes_error["usuario_existente"])
+        messagebox.showerror("Error", "El usuario ya está registrado.")
     elif errores:
         messagebox.showerror("Error", "\n".join(errores))
     else:
@@ -172,7 +172,8 @@ def registrar_usuario(usuario_entry, contrasenia_entry, confirmacion_contrasenia
             "contrasena_caracteres_especiales": "La contraseña debe contener al menos uno de los caracteres especiales '#!'.",
             "contrasena_acentos": "La contraseña no puede contener letras acentuadas.",
             "contrasena_coincidencia": "Las contraseñas no coinciden.",
-            "usuario_existente": "El usuario ya está registrado."
+            "usuario_existente": "El usuario ya está registrado.",
+            "usuario_en_partida": "Este jugador ya se registró en la partida."
     }
     
     errores = []
@@ -180,7 +181,7 @@ def registrar_usuario(usuario_entry, contrasenia_entry, confirmacion_contrasenia
     errores = usuario_valido(mensajes_error, usuario, errores)
     errores = contrasenia_valida(mensajes_error, contrasena, errores)
     errores = verificar_ingreso_contrasenia(confirmar_contrasena, contrasena, mensajes_error, errores)
-    verificar_usuario_existente(usuario, contrasena, mensajes_error, ventana_registrar, errores)
+    verificar_usuario_existente(usuario, contrasena, ventana_registrar, errores)
 
 def guardar_usuario():
     #Acá creamos la ventana para registrar usuarios
