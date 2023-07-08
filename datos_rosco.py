@@ -1,7 +1,5 @@
-# En este programa conservamos algunas funciones de la parte 1 del TP.
-
 import random
-
+# Aca conservamos algunas funciones utilizadas en la etapa 1 del TP
 def cargar_letras(cant_letras_rosco):
     """
     La funcion retorna una lista de 10 letras aleatorias 
@@ -51,7 +49,5 @@ def palabra_sin_acento(palabra):
     for letra in range(len(vocales)):
         palabra = palabra.replace(vocales_con_acento[letra], vocales[letra])
     return palabra
-#diccionario_rosco = cargar_datos_para_rosco()
-#lista_letras = cargar_letras()
-#lista = cargar_palabras_definiciones(diccionario_rosco, lista_letras)
+
 

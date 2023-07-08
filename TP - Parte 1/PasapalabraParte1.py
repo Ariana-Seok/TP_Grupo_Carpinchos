@@ -12,7 +12,7 @@ implementando así, lo realizado en la etapa 1.
 # Etapa 4 - Integracion
 # Etapa 6 - Refactorizacion del Codigo de la Parte 1
 
-from dato_rosco import cargar_letras, cargar_palabras_definiciones
+from datos_rosco import cargar_letras, cargar_palabras_definiciones
 from filtrado_dicc import palabra_sin_acento, cargar_datos_para_rosco
 ACIERTO = "a"
 ERROR = "e"

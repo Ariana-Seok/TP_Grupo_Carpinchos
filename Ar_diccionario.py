@@ -1,6 +1,6 @@
 # Etapa 8 - Archivos de Texto
 
-from dato_rosco import palabra_sin_acento
+from datos_rosco import palabra_sin_acento
 MAX = "ZZZZ"
 
 def leer_archivo(archivo):

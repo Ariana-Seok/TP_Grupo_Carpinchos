@@ -1,6 +1,6 @@
 # Integracion de todas las partes 
-import dato_rosco
-from diccionarioArchivo import manejo_datos
+import datos_rosco
+from Ar_diccionario import manejo_datos
 from registracion_jugadores import asignar_turnos
 
 ACIERTO = "a"
@@ -58,7 +58,7 @@ def cargar_palabra_valida():
     while not palabra.isalpha():
         print("Ingrese solo LETRAS!")
         palabra = input("Ingrese la palabra: ").lower()
-    return dato_rosco.palabra_sin_acento(palabra)
+    return datos_rosco.palabra_sin_acento(palabra)
 
 def respuesta_verificada():
     """
@@ -66,10 +66,10 @@ def respuesta_verificada():
     PRE: La variable "respuesta" solo almacenara algo de tipo str (las cuales seran "si" o "no")
     POST: Devuelve a la variable respuesta ya cargada.
     """
-    respuesta = dato_rosco.palabra_sin_acento(input("\n¿Deseas seguir jugando? (si/no): ").lower())
+    respuesta = datos_rosco.palabra_sin_acento(input("\n¿Deseas seguir jugando? (si/no): ").lower())
     while (respuesta != "si") and (respuesta != "no"):
         print("\nPor favor, ingrese 'si' o 'no'")
-        respuesta = dato_rosco.palabra_sin_acento(input("¿Deseas seguir jugando? (si/no): ").lower())
+        respuesta = datos_rosco.palabra_sin_acento(input("¿Deseas seguir jugando? (si/no): ").lower())
     return respuesta
 
 def analizar_respuesta(puntajes, resultado, puntaje_acierto, puntaje_desacierto):
@@ -323,8 +323,8 @@ def iniciar_juego(jugar_pasapalabra, partidas_jugadas, jugadores,
         referencias = [" " for i in range(cant_letras_rosco)]
         print("\n-----  Comienza el Juego ------")
         partidas_jugadas += 1
-        lista_letras = dato_rosco.cargar_letras(cant_letras_rosco)
-        datos_rosco = dato_rosco.cargar_palabras_definiciones(diccionario_palabra_def, lista_letras)
+        lista_letras = datos_rosco.cargar_letras(cant_letras_rosco)
+        datos_rosco = datos_rosco.cargar_palabras_definiciones(diccionario_palabra_def, lista_letras)
         resumen_partida = cargar_datos_de_la_partida(datos_rosco, lista_letras, jugadores,
                                                     resultados, referencias, jugar_pasapalabra,
                                                     puntaje_acierto, puntaje_desacierto)

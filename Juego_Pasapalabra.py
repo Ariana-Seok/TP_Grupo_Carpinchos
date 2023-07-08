@@ -1,6 +1,6 @@
 # ETAPA 10 - Archivo de Configuraciones
 
-from PasapalabraParte2 import jugar 
+from Pasapalabra import jugar 
 MAX = "fin,0"
 
 def leer_archivo(archivo):
