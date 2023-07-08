@@ -1,6 +1,6 @@
 # Etapa 8 - Archivos de Texto
 
-from filtrado_dicc import palabra_sin_acento
+from dato_rosco import palabra_sin_acento
 MAX = "ZZZZ"
 
 def leer_archivo(archivo):
@@ -95,6 +95,4 @@ def manejo_datos(long_palabra):
     definiciones.close()
     datos.close()
     return diccionario_rosco
-
-
 

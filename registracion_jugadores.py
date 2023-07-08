@@ -9,6 +9,17 @@ USUARIOS_CSV = "usuarios.csv"
 num_inicios_sesion = 0
 usuarios_iniciaron_sesion = []
 
+def leer_archivo(archivo):
+    """
+    Esta función lee una línea del archivo CSV y devuelve un registro como lista.
+    """
+    linea = archivo.readline()
+    if linea:
+        registro = linea.rstrip().split(",")
+    else:
+        registro = []
+    return registro
+
 def validar_usuario(usuario, registro_actual=None):
     """
     El objetivo de esta función es verificar si un usuario ya está registrado en el archivo CSV de usuarios.
@@ -32,71 +43,107 @@ def validar_usuario(usuario, registro_actual=None):
 
     return result
 
-def leer_archivo(archivo):
-    """
-    Esta función lee una línea del archivo CSV y devuelve un registro como lista.
-    """
-    linea = archivo.readline()
-    if linea:
-        registro = linea.rstrip().split(",")
+def comprobar_nombre_usuario(usuario, mensajes_error, mensaje):
+    i = 0
+    contrasenia_valida = True
+    simbolo_valido = "-"
+    cant_num = 0
+    cant_letras = 0
+    cant_simbolo = 0
+
+    while(i < len(usuario)) and contrasenia_valida:
+        if(usuario[i].isalpha()):
+            cant_letras += 1
+        elif(usuario[i].isnumeric()):
+            cant_num += 1
+        elif(usuario[i] == simbolo_valido):
+            cant_simbolo += 1
+        elif not (usuario[i].isalnum()) or (usuario[i] != simbolo_valido):
+            contrasenia_valida = False
+        i += 1
+
+    if not(cant_num > 0) or not (cant_letras > 0) or not (cant_simbolo > 0) or not (contrasenia_valida):
+        mensaje = mensajes_error["usuario_invalido"]
+    return mensaje
+
+def usuario_valido(mensaje, mensajes_error, usuario):
+    MAX_LONG = 20
+    MIN_LONG = 4
+    if (len(usuario) < MIN_LONG) or (len(usuario) > MAX_LONG):
+        mensaje = mensajes_error["usuario_longitud"]
     else:
-        registro = []
-    return registro
+        mensaje = comprobar_nombre_usuario(usuario, mensajes_error, mensaje)
+    return mensaje
+
+def comprobar_contrasenia_valida(mensaje_error, mensajes_error, contrasenia):
+    if not any(caracter.isdigit() for caracter in contrasenia):
+        mensaje_error = mensajes_error["contrasena_digitos"]
+    elif not any(caracter.islower() for caracter in contrasenia):
+        mensaje_error = mensajes_error["contrasena_minusculas"]
+    elif not any(caracter.isupper() for caracter in contrasenia):
+        mensaje_error = mensajes_error["contrasena_mayusculas"]
+    elif not any(caracter in "#!" for caracter in contrasenia):
+        mensaje_error = mensajes_error["contrasena_caracteres_especiales"]
+    elif any(caracter in "áéíóúÁÉÍÓÚ" for caracter in contrasenia):
+        mensaje_error = mensajes_error["contrasena_acentos"]
+    return mensaje_error
+
+def contrasenia_valida(mensaje_error, mensajes_error, contrasenia):
+    MAX_LONG_CONTRASENIA = 12
+    MIN_LONG_CONTRASENIA = 6
+    if(len(contrasenia) < MIN_LONG_CONTRASENIA) or (len(contrasenia) > MAX_LONG_CONTRASENIA):
+        mensaje_error = mensajes_error["contrasena_longitud"]
+    else:
+        mensaje_error = comprobar_contrasenia_valida(mensaje_error, mensajes_error, contrasenia)
+    return mensaje_error
+
+def verificar_ingreso_contrasenia(confirmar_contrasena, contrasena, mensajes_error, mensaje_error):
+    if (contrasena != confirmar_contrasena):  
+        mensaje_error = mensajes_error["contrasena_coincidencia"]
+    return mensaje_error
+
+def verificar_usuario_existente(usuario, contrasena, mensajes_error, mensaje_error, ventana_registrar):
+    if validar_usuario(usuario):
+        mensaje_error = mensajes_error["usuario_existente"]
+    elif mensaje_error:
+        messagebox.showerror("Error", mensaje_error)
+    else:
+        with open("archivosCSV\\usuarios.csv", "a", newline="") as archivo:
+            writer = csv.writer(archivo)
+            writer.writerow([usuario, contrasena])
+        messagebox.showinfo("Éxito", "Usuario registrado exitosamente.")
+        ventana_registrar.destroy()
+
+def registrar_usuario(usuario_entry, contrasenia_entry, confirmacion_contrasenia_entry, ventana_registrar):
+    """
+    Guarda el nombre de usuario y la contraseña en el archivo CSV si cumplen con los requisitos pedidos.
+    Muestra mensajes de error si hay problemas con los datos ingresados.
+    """
+    usuario = usuario_entry.get()
+    contrasena = contrasenia_entry.get()
+    confirmar_contrasena = confirmacion_contrasenia_entry.get()
+    mensajes_error = {
+            "usuario_longitud": "El usuario debe tener entre 4 y 20 caracteres.",
+            "usuario_invalido": "El nombre de usuario no cumple con los requisitos.",
+            "contrasena_longitud": "La contraseña debe tener entre 6 y 12 caracteres.",
+            "contrasena_digitos": "La contraseña debe contener al menos un dígito.",
+            "contrasena_minusculas": "La contraseña debe contener al menos una letra minúscula.",
+            "contrasena_mayusculas": "La contraseña debe contener al menos una letra mayúscula.",
+            "contrasena_caracteres_especiales": "La contraseña debe contener al menos uno de los caracteres especiales '#!'.",
+            "contrasena_acentos": "La contraseña no puede contener letras acentuadas.",
+            "contrasena_coincidencia": "Las contraseñas no coinciden.",
+            "usuario_existente": "El usuario ya está registrado."
+    }
+    
+    
+    mensaje_error = ""
+    mensaje_error = usuario_valido(mensaje_error, mensajes_error, usuario)
+    mensaje_error = contrasenia_valida(mensaje_error, mensajes_error, contrasena)
+    mensaje_error = verificar_ingreso_contrasenia(confirmar_contrasena, contrasena, mensajes_error, mensaje_error)
+    verificar_usuario_existente(usuario, contrasena, mensajes_error, mensaje_error, ventana_registrar)
 
 
 def guardar_usuario():
-    """
-    Esta función se llama cuando se hace clic en el botón "Registrarse". Verifica si se ha alcanzado el número máximo 
-    de usuarios permitidos antes de continuar. Si se ha alcanzado el límite, muestra un mensaje de error. 
-    De lo contrario, crea una nueva ventana de registro donde el usuario puede ingresar su nombre de usuario, 
-    contraseña y confirmar la contraseña. Después de hacer clic en el botón "Registrar", se validan los datos ingresados 
-    y se guardan en el archivo CSV si son válidos.
-    """
-
-    def registrar_usuario():
-        """
-        Guarda el nombre de usuario y la contraseña en el archivo CSV si cumplen con los requisitos pedidos.
-        Muestra mensajes de error si hay problemas con los datos ingresados.
-        """
-        usuario = usuario_entry.get()
-        contrasena = contrasenia_entry.get()
-        confirmar_contrasena = confirmacion_contrasenia_entry.get()
-
-        mensaje_error = None
-
-        # Verificar el nombre de usuario
-        if len(usuario) < 4 or len(usuario) > 20 or not all(caracter.isalnum() or caracter == "-" for caracter in usuario):
-            mensaje_error = "El nombre de usuario no cumple con los requisitos."
-
-        # Verificar la contraseña
-        elif len(contrasena) < 6 or len(contrasena) > 12:
-            mensaje_error = "La contraseña debe tener entre 6 y 12 caracteres."
-        elif not any(caracter.isdigit() for caracter in contrasena):
-            mensaje_error = "La contraseña debe contener al menos un dígito."
-        elif not any(caracter.islower() for caracter in contrasena):
-            mensaje_error = "La contraseña debe contener al menos una letra minúscula."
-        elif not any(caracter.isupper() for caracter in contrasena):
-            mensaje_error = "La contraseña debe contener al menos una letra mayúscula."
-        elif not any(caracter in "#!" for caracter in contrasena):
-            mensaje_error = "La contraseña debe contener al menos uno de los caracteres especiales '#!'."
-        elif any(caracter in "áéíóúÁÉÍÓÚ" for caracter in contrasena):
-            mensaje_error = "La contraseña no puede contener letras acentuadas."
-        if contrasena != confirmar_contrasena:  
-            mensaje_error = "Las contraseñas no coinciden."
-
-        # Verificar si el usuario ya está registrado
-        elif validar_usuario(usuario):
-            mensaje_error = "El usuario ya está registrado."
-
-        if mensaje_error:
-            messagebox.showerror("Error", mensaje_error)
-        else:
-            with open("archivosCSV\\usuarios.csv", "a", newline="") as archivo:
-                writer = csv.writer(archivo)
-                writer.writerow([usuario, contrasena])
-            messagebox.showinfo("Éxito", "Usuario registrado exitosamente.")
-            ventana_registrar.destroy()
-
     #Acá creamos la ventana para registrar usuarios
     ventana_registrar = tk.Toplevel()
     ventana_registrar.title("Registro de Usuario")
@@ -119,10 +166,10 @@ def guardar_usuario():
     confirmacion_contrasenia_entry.pack()
     separador = tk.Frame(ventana_registrar, height=5, bg="#777777")
     separador.pack(fill=tk.X, pady=5)
-    registrar_button = tk.Button(ventana_registrar, text="Registrar", command=registrar_usuario)
+    registrar_button = tk.Button(ventana_registrar, text="Registrar", command= lambda : registrar_usuario(usuario_entry, contrasenia_entry, confirmacion_contrasenia_entry, ventana_registrar))
     registrar_button.pack()
     ventana_registrar.mainloop()
-
+    
 def cerrar_ventana():
     """
     Funcion que es llamada cuando se pulsa el boton de iniciar partida, cierra la ventana de inicio de sesion.
@@ -185,7 +232,7 @@ root.geometry("300x200")
 root.resizable(False, False)
 
 #Icono de root
-icono = tk.PhotoImage(file="img\pasapalabra.PNG")
+icono = tk.PhotoImage(file="img/pasapalabra.PNG")
 root.iconphoto(True, icono)
 
 # Crear el canvas y establecer la imagen de fondo
@@ -220,6 +267,5 @@ iniciar_partida_button.place(x=99, y=154)
 
 root.mainloop()
 
-
-import doctest
-doctest.testmod()
+#import doctest
+#doctest.testmod()

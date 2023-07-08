@@ -13,8 +13,7 @@ implementando así, lo realizado en la etapa 1.
 # Etapa 6 - Refactorizacion del Codigo de la Parte 1
 
 from dato_rosco import cargar_letras, cargar_palabras_definiciones
-from filtrado_dicc import palabra_sin_acento
-from diccionarioArchivo import manejo_datos
+from filtrado_dicc import palabra_sin_acento, cargar_datos_para_rosco
 ACIERTO = "a"
 ERROR = "e"
 
@@ -152,7 +151,7 @@ def jugar_rosco():
     resultado = [" " for i in range(10)]
     continuar_jugando = True
     puntaje_total = 0
-    diccionario_datos_rosco = manejo_datos(long_palabra)
+    diccionario_datos_rosco = cargar_datos_para_rosco()
 
     while continuar_jugando:
         cant_letras = 10
